@@ -1,0 +1,278 @@
+/*
+ * Author: Carlos Alvarez
+ * URL: http://alvarez.is
+ *
+ * Project Name: Bolt - Free Bootstrap 3 Theme
+ * Version: 1.0
+ * URL: http://blacktie.co
+ */
+ 
+/* FONTS */
+
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900);
+@import url(http://fonts.googleapis.com/css?family=Raleway:400,300,700,900);
+
+/* OVERALL ASPECT */
+
+body {
+  background-color: #f2f2f2;
+    font-family: "Lato";
+    font-weight: 300;
+    font-size: 16px;
+    color: #3dd0ac000;
+
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+    
+    margin-top: 70px;
+}
+
+/* Titles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway";
+    font-weight: 300;
+    color: #36bb9a;
+}
+
+
+#343241{
+	margin-top:250px;
+	margin-bottom: 00px;
+}
+
+
+/* Paragraph & Typographic */
+p {
+    line-height: 28px;
+    margin-bottom: 25px;
+}
+
+.centered {
+    text-align: center;
+}
+
+.mt {
+	margin-top: 40px;
+}
+.nav-child {
+    display:none;
+}
+/* Links */
+a {
+    color: #30a689;
+    word-wrap: break-word;
+
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+a:hover,
+a:focus {
+    color: #42cac5;
+	background-color:#3dd0ac000
+    text-decoration: none;
+    outline: 0;
+}
+
+a:before,
+a:after {
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+
+
+
+
+/* Bootstrap Modifications */
+ hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+
+.navbar {
+	font-weight: 800;
+	font-size: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background-color: #ffffff;
+}
+.navbar-nav > .active > a:hover{
+	color: #ffffff;
+	background-color: #ffffff;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default , .navbar-default .navbar-nav > .active > a:focus {
+	color: #000;
+	background-color: #f7f7f7;
+}
+
+.navbar-brand {
+	font-size: 60px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	
+}
+
+.btn-theme {
+	color: #ffffff;
+	background-color: #3dd0ac;
+	border-color: transparent;
+}
+
+.btn {
+	padding: 5px 10px;
+	margin-bottom: 0;
+	font-size: 14px;
+	border: 3px solid transparent;
+	border-radius: 10px;
+}
+
+
+
+.title1{
+	padding-top:5px;
+	padding-bottom:30px;
+}
+
+.lead {
+	letter-spacing: 1px;
+}
+
+.para{
+	padding-bottom:10px;
+}
+/* WRAP SECTIONS */
+
+/* hello */
+#hello {
+	width: 100%;
+	padding-top: 150px;
+	padding-bottom: 250px;
+}
+
+#hello h1 {
+	font-size: 70px;
+	font-weight: 700;
+	letter-spacing: 3px;
+	color: #3dd0ac;
+}
+
+#hello h2 {
+	color: #000;
+	font-weight: 400;
+}
+
+/* Green */
+#green {
+	background-color: #d9d9d9;
+	padding-top: 50px;
+	padding-bottom: 120px
+	margin-bottom: 0px;
+}
+
+#green1{
+	background-color: #c1c1c1;
+	padding-top: 50px;
+	padding-bottom: 120px
+	margin-bottom: 0px;
+}
+#greenh3 {
+	color: #000;
+	font-weight: 400;
+	margin-bottom: 35px;
+}
+
+/*#green p {
+	color: #000;
+	font-weight: 400;
+	font-size: 20px;
+}*/
+#sec1,#sec2,#sec3,#sec4,#sec5,#sec6,#sec7,#sec8,#sec9,#sec10,#sec11,#sec12,#sec13{
+	
+	padding-bottom: 110px;
+	
+	}
+#sear{
+	float:left
+}
+#Overview{
+	padding-bottom: 200px;
+}
+#Info{
+	
+	padding-bottom: 70px;
+	}
+#Database{
+	padding-top: 0px;
+	padding-bottom: 70px;
+}
+#searchTerm{
+margin-top:10px;
+}
+/* Skills */
+#skills {
+	background-color: #4e4e4e;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	margin-top: 50px;
+}
+
+#skills h3 {
+	color: white;
+}
+
+#skills p {
+	color: white;
+	font-weight: 400;
+}
+
+/* Social Links */
+#social {
+	width: 100%;
+	padding-top: 200px;
+	padding-bottom: 200px;
+}
+
+#social i {
+	font-size: 50px;
+	color: #3dd0ac;
+}
+
+#social .col-md-3:hover {
+	background-color: #f5f5f5;
+}
+
+#social .col-md-3 {
+	padding:30px;
+}
+
+/* Footer */
+#f {
+	padding-top: 20px;
+	background-color: #30a689;
+}
+
+#f p {
+	color: white;
+	text-align: right;
+	font-weight: 400;
+}
+
+/* Image Opacity */
+.grid img {
+    opacity: .7;
+}
+.grid img:hover {
+    opacity: 1;
+}
