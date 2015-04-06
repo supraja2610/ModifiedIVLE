@@ -21,44 +21,34 @@
     <script src="assets/js/chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
-    var rows;
-
-        var month = new Array();
-        var week;
-month[0] = "Jan";
-month[1] = "Feb";
-month[2] = "Mar";
-month[3] = "Apr";
-month[4] = "May";
-month[5] = "Jun";
-month[6] = "Jul";
-month[7] = "Aug";
-month[8] = "Sept";
-month[9] = "Oct";
-month[10] = "Nov";
-month[11] = "Dec";
+	
+	var rows;
+	
     $(window).load(function(){
         $('#myModal').modal('show');
+		//var newscontent;
         
-        $.post("userEnd.php",
+		$.post("news.php",
         {
                 cmd: "load"
         },
         function(data){
-               rows = JSON.parse(data);
-               // console.log(rows);
-               allweeks();
-        });
-        $.post("userEnd.php",
-        {
-                cmd: "getweek"
-        },
-        function(data){
-            console.log(data);
-               week = parseInt(data,10);
+               console.log(data);
+			   var message = "";
+			   rows = JSON.parse(data)
+			   for(var i =0; i< rows.length; i++){
+			   var row = rows[i];
+				message =  message + "<p> <b>" + row['newsDate'] + "</b> <br>";
+				message = message + row['content'] + "</p>";
+			   
+				}
+				console.log(message);
+				$('.modal-body').html(message);
+			   //newscontent = JSON.parse(data);
         });
     });
     
+
     
     $(document).ready(function (){
             $("#test1").click(function (){
@@ -110,117 +100,7 @@ month[11] = "Dec";
             });
             
         });
-
-      function futureweeks(){
-      $('#lesson3 > tbody').empty();
-      var msg = "";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                var rw = parseInt(row['weekId'],10);
-                if(rw>=week){
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
-                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-
-                // }
-                msg +="</tr>";
-                // console.log(msg);
-               }
-             }
-               $('#lesson3 > tbody:last').append(msg);
-               return true;
-
-    }
-      function thisweek(){
-      $('#lesson2 > tbody').empty();
-      var msg = "";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                var rw = parseInt(row['weekId'],10);
-                if(rw>=week-1 && rw<=week+1){
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
-                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-
-                // }
-                msg +="</tr>";
-                // console.log(msg);
-               }
-             }
-               $('#lesson2 > tbody:last').append(msg);
-
-    }
-    function allweeks(){
-      $('#lesson1 > tbody').empty();
-      var msg = "";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
-                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-
-                // }
-                msg +="</tr>";
-                // console.log(msg);
-               }
-               $('#lesson1 > tbody:last').append(msg);
-    }
-
-    function condensed(){
-      $('#lesson4 > tbody').empty();
-      var msg = "";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                var rw = parseInt(row['weekId'],10);
-                if(rw>=week){
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</td>";
-                  msg += "<td><b>"+row['lectureTitle']+"</td>";
-
-                // }
-                msg +="</tr>";
-                // console.log(msg);
-               }
-             }
-               $('#lesson4 > tbody:last').append(msg);
-
-    }
+    
     </script>
     
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -241,8 +121,8 @@ month[11] = "Dec";
         <h4 class="modal-title" id="myModalLabel">News</h4>
       </div>
       <div class="modal-body">
-        <dt>   Tuesday, 24 March 2015</dt>
-                            <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd>
+			<!--<p> <b> Tuesday, 24 March 2015 </b> <br>
+            Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</p>-->
       </div>
      
     </div>
@@ -364,10 +244,10 @@ month[11] = "Dec";
                                 <hr align="center" width="100%" size="5"><br>
                                 <ul class="nav nav-tabs nav-justified">
                          <li><a data-toggle="tab" class = "active" href="#dropdown4"><h4>All weeks</h4></a></li>
-                                    <li><a data-toggle="tab" href="#dropdown5" onclick="return thisweek();"><h4>This week</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown5"><h4>This week</h4></a></li>
 
-                                    <li><a data-toggle="tab" href="#dropdown6 " onclick="return futureweeks();"><h4>Future weeks</h4></a></li>
-                                    <li><a data-toggle="tab" href="#dropdown7" onclick="return condensed();"><h4>Condensed view</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown6"><h4>Future weeks</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown7"><h4>Condensed view</h4></a></li>
                         </ul>
                          <div class="tab-content">
 
@@ -378,7 +258,7 @@ month[11] = "Dec";
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
                                 <div class=""> 
-                                    <table  id = "lesson1" class="table table-bordered">
+                                    <table  class="table table-bordered">
                                         <thead>
                                             <tr>
 
@@ -389,6 +269,48 @@ month[11] = "Dec";
                                             </tr>
                                         </thead>
                                         <tbody>
+                                           <tr deadline="1421121599"> <!--13 Jan 15, 11.59am-->
+  <td>01, 13 Jan</td>
+  <td>N/A yet</td>
+  <td><a href="cp3101b/introduction.html">Lecture1 - Introduction</a> and do <a href="http://cp3101b.comp.nus.edu.sg/~stevenha/profile.html" target="_blank">Profiling</a> (official students only)</td>
+</tr>
+<tr deadline="1421121599"> <!--13 Jan 15, 11.59am-->
+  <td></td>
+  <td>N/A yet</td>
+  <td><a href="cp3101b/http.html">Lecture2 - HTTP</a> </td>
+</tr>
+
+<tr deadline="1421726399"> <!--20 Jan 15, 11.59am-->
+  <td>02, 20 Jan</td>
+  <td><a href="cp3101b/lab0.html"><span title="Compulsory-but-not-graded">Lab0: Ensuring Web Presence*</span></a></td>
+  <td><a href="cp3101b/html5.html">Lecture3 - HTML5</a> followed with <a href="cp3101b/css3.html">Lecture4 - CSS3</a> (short, not Steven's strength yet)
+  </td>
+</tr>
+
+<tr deadline="1422331199"> <!--27 Jan 15, 11.59am-->
+  <td>03, 26+27 Jan</td>
+  <td><a href="cp3101b/lab1.html">Lab1: Not Just Mockup</a></td>
+  <td><a href="cp3101b/css3.html#css-box-model">Lecture4 - CSS3</a> (continued), then <a href="cp3101b/js.html">Lecture5 - JS</a> 
+</tr>
+
+<tr deadline="1422935999"> <!--03 Feb 15, 11.59am-->
+  <td>04, 02+03 Feb</td>
+  <td><a href="cp3101b/lab2.html">Lab2: First Version</a></td>
+  <td><a href="cp3101b/js.html#Recap">Lecture5 - JS</a> (jQuery, HTML5 canvas, and beyond)</a> 
+</tr>
+
+<tr deadline="1423540799"> <!--10 Feb 15, 11.59am-->
+  <td>05, 09+10 Feb</td>
+  <td><a href="cp3101b/lab3.html">Lab3: Requirement Change</a></td>
+  <td><a href="cp3101b/php.html">Lecture6 - PHP</a></td>
+</tr>
+
+<tr deadline="1424145599"> <!--17 Feb 15, 11.59am-->
+  <td>06, 16+17 Feb</td>
+  <td><a href="cp3101b/lab4.html">Lab4: Game Server</a></td>
+  <td><a href="cp3101b/sql.html">Lecture7 - SQL</a> (which ends with PHP integration) 
+  </td>
+</tr>
                                             
                                         </tbody>
                                     </table>
@@ -401,7 +323,7 @@ month[11] = "Dec";
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
                                 <div class=""> 
-                                    <table  id="lesson2" class="table table-bordered">
+                                    <table  class="table table-bordered">
                                         <thead>
                                             <tr>
 
@@ -413,6 +335,31 @@ month[11] = "Dec";
                                         </thead>
                                         <tbody>
                                            
+
+<tr deadline="1422331199"> <!--27 Jan 15, 11.59am-->
+  <td>03, 26+27 Jan</td>
+  <td><a href="cp3101b/lab1.html">Lab1: Not Just Mockup</a></td>
+  <td><a href="cp3101b/css3.html#css-box-model">Lecture4 - CSS3</a> (continued), then <a href="cp3101b/js.html">Lecture5 - JS</a> 
+</tr>
+
+<tr deadline="1422935999"> <!--03 Feb 15, 11.59am-->
+  <td>04, 02+03 Feb</td>
+  <td><a href="cp3101b/lab2.html">Lab2: First Version</a></td>
+  <td><a href="cp3101b/js.html#Recap">Lecture5 - JS</a> (jQuery, HTML5 canvas, and beyond)</a> 
+</tr>
+
+<tr deadline="1423540799"> <!--10 Feb 15, 11.59am-->
+  <td>05, 09+10 Feb</td>
+  <td><a href="cp3101b/lab3.html">Lab3: Requirement Change</a></td>
+  <td><a href="cp3101b/php.html">Lecture6 - PHP</a></td>
+</tr>
+
+<tr deadline="1424145599"> <!--17 Feb 15, 11.59am-->
+  <td>06, 16+17 Feb</td>
+  <td><a href="cp3101b/lab4.html">Lab4: Game Server</a></td>
+  <td><a href="cp3101b/sql.html">Lecture7 - SQL</a> (which ends with PHP integration) 
+  </td>
+</tr>
                                             
                                         </tbody>
                                     </table>
@@ -426,7 +373,7 @@ month[11] = "Dec";
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
                                 <div class=""> 
-                                    <table  id = "lesson3" class="table table-bordered">
+                                    <table  class="table table-bordered">
                                         <thead>
                                             <tr>
 
@@ -437,6 +384,28 @@ month[11] = "Dec";
                                             </tr>
                                         </thead>
                                         <tbody>
+                                           
+
+
+
+<tr deadline="1422935999"> <!--03 Feb 15, 11.59am-->
+  <td>04, 02+03 Feb</td>
+  <td><a href="cp3101b/lab2.html">Lab2: First Version</a></td>
+  <td><a href="cp3101b/js.html#Recap">Lecture5 - JS</a> (jQuery, HTML5 canvas, and beyond)</a> 
+</tr>
+
+<tr deadline="1423540799"> <!--10 Feb 15, 11.59am-->
+  <td>05, 09+10 Feb</td>
+  <td><a href="cp3101b/lab3.html">Lab3: Requirement Change</a></td>
+  <td><a href="cp3101b/php.html">Lecture6 - PHP</a></td>
+</tr>
+
+<tr deadline="1424145599"> <!--17 Feb 15, 11.59am-->
+  <td>06, 16+17 Feb</td>
+  <td><a href="cp3101b/lab4.html">Lab4: Game Server</a></td>
+  <td><a href="cp3101b/sql.html">Lecture7 - SQL</a> (which ends with PHP integration) 
+  </td>
+</tr>
                                             
                                         </tbody>
                                     </table>
@@ -449,7 +418,7 @@ month[11] = "Dec";
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
                                 <div class=""> 
-                                    <table  id="lesson4" class="table table-bordered">
+                                    <table  class="table table-bordered">
                                         <thead>
                                             <tr>
 
@@ -460,6 +429,25 @@ month[11] = "Dec";
                                             </tr>
                                         </thead>
                                         <tbody>
+                                           
+
+<tr deadline="1422331199"> <!--27 Jan 15, 11.59am-->
+  <td>03, 26+27 Jan</td>
+  <td><a href="cp3101b/lab1.html">Not Just Mockup</a></td>
+  <td><a href="cp3101b/css3.html#css-box-model">CSS3</a> 
+</tr>
+
+<tr deadline="1422935999"> <!--03 Feb 15, 11.59am-->
+  <td>04, 02+03 Feb</td>
+  <td><a href="cp3101b/lab2.html">First Version</a></td>
+  <td><a href="cp3101b/js.html#Recap">JS</a> </a> 
+</tr>
+
+<tr deadline="1423540799"> <!--10 Feb 15, 11.59am-->
+  <td>05, 09+10 Feb</td>
+  <td><a href="cp3101b/lab3.html">Requirement Change</a></td>
+  <td><a href="cp3101b/php.html">PHP</a></td>
+</tr>
 
 
                                             
