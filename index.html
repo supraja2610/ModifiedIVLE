@@ -39,15 +39,33 @@ month[10] = "Nov";
 month[11] = "Dec";
     $(window).load(function(){
         $('#myModal').modal('show');
-        
+
         $.post("userEnd.php",
         {
                 cmd: "load"
         },
         function(data){
-               rows = JSON.parse(data);
+              var all = JSON.parse(data);
+              console.log(all);
+
+               rows = JSON.parse(all['lesson']);
+               console.log("lesson:");
+               console.log(rows);
                // console.log(rows);
+               var message = "";
                allweeks();
+               newsRows = JSON.parse(all['news']);
+               console.log("news:");
+               console.log(newsRows);
+               for(var i =0; i< newsRows.length; i++){
+                  var row = newsRows[i];
+                  message =  message + "<p> <b>" + row['newsDate'] + "</b> <br>";
+                  message = message + row['content'] + "</p>";
+         
+        }
+        console.log(message);
+        $('.modal-body').html(message);
+
         });
         $.post("userEnd.php",
         {
