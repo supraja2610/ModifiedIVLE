@@ -39,114 +39,15 @@ month[10] = "Nov";
 month[11] = "Dec";
     $(window).load(function(){
         $('#myModal').modal('show');
-
+        
         $.post("userEnd.php",
         {
                 cmd: "load"
         },
         function(data){
-              var all = JSON.parse(data);
-              console.log(all);
-
-               rows = JSON.parse(all['lesson']);
-               console.log("lesson:");
-               console.log(rows);
+               rows = JSON.parse(data);
                // console.log(rows);
-               var message = "";
                allweeks();
-               newsRows = JSON.parse(all['news']);
-               console.log("news:");
-               console.log(newsRows);
-               for(var i =0; i< newsRows.length; i++){
-				   var row = newsRows[i];
-				   var dateformat =  row['newsDate'];
-				   var date = dateformat.substring(0,11);
-				   var month = dateformat.substring(5,7);
-				   var year = dateformat.substring(0,4);
-				   var dd = dateformat.substring(8,10);
-				   var monthString = "";
-				   var dayString = "";
-				   var day = new Date(parseInt(year), parseInt(month,10)-1, parseInt(dd,10));
-				   
-				   var dayNumber = day.getDay();
-				   switch(dayNumber){
-					case 0: 
-						dayString = "Sunday, ";
-						break;
-					case 1: 
-						dayString = "Monday, ";
-						break;
-					case 2: 
-						dayString = "Tuesday, ";
-						break;
-					case 3: 
-						dayString = "Wednesday, ";
-						break;
-					case 4: 
-						dayString = "Thursday, ";
-						break;
-					case 5: 
-						dayString = "Friday, ";
-						break;
-					case 6: 
-						dayString = "Saturday, ";
-						break;
-					default:
-						dyaString = "Monday, ";
-								   
-				   }
-				   
-				   
-				   switch(parseInt(month,10)){
-					case 1: 
-						monthString = " January ";
-						break;
-					case 2: 
-						monthString = " February ";
-						break;
-					case 3: 
-						monthString = " March ";
-						break;
-					case 4: 
-						monthString = " April ";
-						break;
-					case 5: 
-						monthString = " May ";
-						break;
-					case 6: 
-						monthString = " June ";
-						break;
-					case 7: 
-						monthString = " July ";
-						break;
-					case 8: 
-						monthString = " August ";
-						break;
-					case 9: 
-						monthString = " September ";
-						break;
-					case 10: 
-						monthString = " October ";
-						break;
-					case 11: 
-						monthString = " November ";
-						break;
-					case 12: 
-						monthString = " December ";
-						break;
-					default:
-						monthString = month;
-								   
-				   }
-						   
-					message =  message + "<p> <b>" + dayString + dd + monthString + year + "</b> <br>";
-					message = message + row['content'] + "</p>";
-			   
-         
-        }
-        console.log(message);
-        $('.modal-body').html(message);
-
         });
         $.post("userEnd.php",
         {
@@ -156,7 +57,6 @@ month[11] = "Dec";
             console.log(data);
                week = parseInt(data,10);
         });
-		
 		$.post("roster.php",
 		{
 			cmd:"load"
@@ -240,12 +140,9 @@ month[11] = "Dec";
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
-											;
-					
+
                 // }
                 msg +="</tr>";
-				
                 // console.log(msg);
                }
              }
@@ -272,10 +169,9 @@ month[11] = "Dec";
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
                 // }
                 msg +="</tr>";
-				
                 // console.log(msg);
                }
              }
@@ -299,7 +195,7 @@ month[11] = "Dec";
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
                 // }
                 msg +="</tr>";
                 // console.log(msg);
@@ -326,7 +222,7 @@ month[11] = "Dec";
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</td>";
-				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
                 // }
                 msg +="</tr>";
                 // console.log(msg);
@@ -348,9 +244,8 @@ month[11] = "Dec";
 			msg2+= "<td>" + name + "</td>";
 			var lab=row2['LABNO'];
 			msg2+= "<td>" + lab + "</td>";
-			msg2+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
 			msg2+="</tr>";
-			
+		
 		}
 		$('#lecture>tbody:last').append(msg2);
 	
@@ -381,7 +276,6 @@ month[11] = "Dec";
 				msg+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg+= "<td>" + name + "</td>";
-				msg+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
 				msg+="</tr>";
 				class1+=1;
 			}
@@ -391,7 +285,6 @@ month[11] = "Dec";
 				msg2+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg2+= "<td>" + name + "</td>";
-				msg2+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
 				msg2+="</tr>";
 				class2+=1;
 			}
@@ -401,7 +294,6 @@ month[11] = "Dec";
 				msg3+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg3+= "<td>" + name + "</td>";
-				msg3+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
 				msg3+="</tr>";
 				class3+=1;
 			}
@@ -491,7 +383,6 @@ month[11] = "Dec";
 					msg1+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg1+= "<td>" + name + "</td>";
-					msg1+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
 					msg1+="</tr>";
 					msg1+=tmp;
 				}
@@ -502,7 +393,6 @@ month[11] = "Dec";
 					msg2+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg2+= "<td>" + name + "</td>";
-					msg2+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
 					msg2+="</tr>";
 					msg2+=tmp;
 				}
@@ -512,7 +402,6 @@ month[11] = "Dec";
 					msg3+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg3+= "<td>" + name + "</td>";
-					msg3+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
 					msg3+="</tr>";
 					msg3+=tmp;
 				}
@@ -525,6 +414,7 @@ month[11] = "Dec";
 		$('#project1>tbody:last').append(msg1);
 		$('#project2>tbody:last').append(msg2);
 		$('#project3>tbody:last').append(msg3);
+		console.log("msg"+"1");
 	}
     </script>
     
@@ -574,7 +464,7 @@ month[11] = "Dec";
         <li><a id="test2">News</a></li>
         <li><a id="test3">Lesson Plan</a></li>
         <li><a id="test4">Class Roster</a></li>
-        <li><a href="/~suprajas/project/login.php">Admin Sign In</a></li>
+        
         
 
         
@@ -610,7 +500,7 @@ month[11] = "Dec";
 		<div id="12" class="container">
 			<div class="row">
 				
-				<h2><b>Inroduction</b></h2>
+				<h2><b>Introduction</b></h2>
                 <hr align="center" width="100%" size="5">
 				<div class="col-lg-15 centered">
 					<p >I (Dr Steven Halim) have the experience of creating a (simple and static) personal website since year 2000 and the highly successful VisuAlgo: algorithm visualization and animation website since 2011. However, I am still learning the latest web development techniques as of year 2014-2015. In Semester 2 (Jan-Apr 2015) of this Academic Year (AY) 2014/15, I am assigned to teach this new module CP3101B - Web Programming and Applications Show the official module description with Steven's improvisation. This revamped "World of Seven" website and in particular this single -- all-in "cp3101b.html" webpage will be the main page of CP3101B*.

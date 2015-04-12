@@ -21,117 +21,37 @@
     <script src="assets/js/chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
-	
-	var rows;
-	
+    var rows;
+
+        var month = new Array();
+        var week;
+month[0] = "Jan";
+month[1] = "Feb";
+month[2] = "Mar";
+month[3] = "Apr";
+month[4] = "May";
+month[5] = "Jun";
+month[6] = "Jul";
+month[7] = "Aug";
+month[8] = "Sept";
+month[9] = "Oct";
+month[10] = "Nov";
+month[11] = "Dec";
     $(window).load(function(){
         $('#myModal').modal('show');
-		//var newscontent;
-        
-		$.post("news.php",
-        {
-                cmd: "load"
-        },
-        function(data){
-               console.log(data);
-			   var message = "";
-			   rows = JSON.parse(data)
-			   for(var i =0; i< rows.length; i++){
-			   var row = rows[i];
-			   var dateformat =  row['newsDate'];
-			   var date = dateformat.substring(0,11);
-			   var month = dateformat.substring(5,7);
-			   var year = dateformat.substring(0,4);
-			   var dd = dateformat.substring(8,10);
-			   var monthString = "";
-			   var dayString = "";
-			   var day = new Date(parseInt(year), parseInt(month,10)-1, parseInt(dd,10));
-			   
-			   var dayNumber = day.getDay();
-			   switch(dayNumber){
-				case 0: 
-					dayString = "Sunday, ";
-					break;
-				case 1: 
-					dayString = "Monday, ";
-					break;
-				case 2: 
-					dayString = "Tuesday, ";
-					break;
-				case 3: 
-					dayString = "Wednesday, ";
-					break;
-				case 4: 
-					dayString = "Thursday, ";
-					break;
-				case 5: 
-					dayString = "Friday, ";
-					break;
-				case 6: 
-					dayString = "Saturday, ";
-					break;
-				default:
-					dyaString = "Monday, ";
-							   
-			   }
-			   
-			   
-			   switch(parseInt(month,10)){
-				case 1: 
-					monthString = " January ";
-					break;
-				case 2: 
-					monthString = " February ";
-					break;
-				case 3: 
-					monthString = " March ";
-					break;
-				case 4: 
-					monthString = " April ";
-					break;
-				case 5: 
-					monthString = " May ";
-					break;
-				case 6: 
-					monthString = " June ";
-					break;
-				case 7: 
-					monthString = " July ";
-					break;
-				case 8: 
-					monthString = " August ";
-					break;
-				case 9: 
-					monthString = " September ";
-					break;
-				case 10: 
-					monthString = " October ";
-					break;
-				case 11: 
-					monthString = " November ";
-					break;
-				case 12: 
-					monthString = " December ";
-					break;
-				default:
-					monthString = month;
-							   
-			   }
-			   
-			   
-			   
-			   
-				message =  message + "<p> <b>" + dayString + dd + monthString + year + "</b> <br>";
-				message = message + row['content'] + "</p>";
-			   
-				}
-				console.log(message);
-				$('.modal-body').html(message);
-			   //newscontent = JSON.parse(data);
-        });
+		
+		$.post("roster.php",
+		{
+			cmd:"load"
+		},
+		function(data){
+			rows=JSON.parse(data);
+			allStudents();
+			
+		});
+
     });
     
-
     
     $(document).ready(function (){
             $("#test1").click(function (){
@@ -183,7 +103,25 @@
             });
             
         });
-    
+	function allStudents(){
+		$('#lecture>tbody').empty();
+		var msg="";
+		for (var i=0;i<rows.length;i++){
+			var row=rows[i];
+			msg+="<tr>";
+			var mat=row['MATNO'];
+			msg+= "<td>" + mat + "</td>";
+			var name=row['NAME'];
+			msg+= "<td>" + name + "</td>";
+			var lab=row['LABNO'];
+			msg+= "<td>" + lab + "</td>";
+			msg+="</tr>";
+		
+		}
+		$('#lecture>tbody:last').append(msg);
+	
+	}
+   
     </script>
     
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -204,8 +142,8 @@
         <h4 class="modal-title" id="myModalLabel">News</h4>
       </div>
       <div class="modal-body">
-			<!--<p> <b> Tuesday, 24 March 2015 </b> <br>
-            Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</p>-->
+        <dt>   Tuesday, 24 March 2015</dt>
+                            <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd>
       </div>
      
     </div>
@@ -327,7 +265,7 @@
                                 <hr align="center" width="100%" size="5"><br>
                                 <ul class="nav nav-tabs nav-justified">
                          <li><a data-toggle="tab" class = "active" href="#dropdown4"><h4>All weeks</h4></a></li>
-                                    <li><a data-toggle="tab" href="#dropdown5"><h4>This week</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown5" onclick="return thisweek();"><h4>This week</h4></a></li>
 
                                     <li><a data-toggle="tab" href="#dropdown6"><h4>Future weeks</h4></a></li>
                                     <li><a data-toggle="tab" href="#dropdown7"><h4>Condensed view</h4></a></li>
@@ -341,7 +279,7 @@
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
                                 <div class=""> 
-                                    <table  class="table table-bordered">
+                                    <table  id = "lesson1" class="table table-bordered">
                                         <thead>
                                             <tr>
 
@@ -352,48 +290,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                           <tr deadline="1421121599"> <!--13 Jan 15, 11.59am-->
-  <td>01, 13 Jan</td>
-  <td>N/A yet</td>
-  <td><a href="cp3101b/introduction.html">Lecture1 - Introduction</a> and do <a href="http://cp3101b.comp.nus.edu.sg/~stevenha/profile.html" target="_blank">Profiling</a> (official students only)</td>
-</tr>
-<tr deadline="1421121599"> <!--13 Jan 15, 11.59am-->
-  <td></td>
-  <td>N/A yet</td>
-  <td><a href="cp3101b/http.html">Lecture2 - HTTP</a> </td>
-</tr>
-
-<tr deadline="1421726399"> <!--20 Jan 15, 11.59am-->
-  <td>02, 20 Jan</td>
-  <td><a href="cp3101b/lab0.html"><span title="Compulsory-but-not-graded">Lab0: Ensuring Web Presence*</span></a></td>
-  <td><a href="cp3101b/html5.html">Lecture3 - HTML5</a> followed with <a href="cp3101b/css3.html">Lecture4 - CSS3</a> (short, not Steven's strength yet)
-  </td>
-</tr>
-
-<tr deadline="1422331199"> <!--27 Jan 15, 11.59am-->
-  <td>03, 26+27 Jan</td>
-  <td><a href="cp3101b/lab1.html">Lab1: Not Just Mockup</a></td>
-  <td><a href="cp3101b/css3.html#css-box-model">Lecture4 - CSS3</a> (continued), then <a href="cp3101b/js.html">Lecture5 - JS</a> 
-</tr>
-
-<tr deadline="1422935999"> <!--03 Feb 15, 11.59am-->
-  <td>04, 02+03 Feb</td>
-  <td><a href="cp3101b/lab2.html">Lab2: First Version</a></td>
-  <td><a href="cp3101b/js.html#Recap">Lecture5 - JS</a> (jQuery, HTML5 canvas, and beyond)</a> 
-</tr>
-
-<tr deadline="1423540799"> <!--10 Feb 15, 11.59am-->
-  <td>05, 09+10 Feb</td>
-  <td><a href="cp3101b/lab3.html">Lab3: Requirement Change</a></td>
-  <td><a href="cp3101b/php.html">Lecture6 - PHP</a></td>
-</tr>
-
-<tr deadline="1424145599"> <!--17 Feb 15, 11.59am-->
-  <td>06, 16+17 Feb</td>
-  <td><a href="cp3101b/lab4.html">Lab4: Game Server</a></td>
-  <td><a href="cp3101b/sql.html">Lecture7 - SQL</a> (which ends with PHP integration) 
-  </td>
-</tr>
                                             
                                         </tbody>
                                     </table>
@@ -406,7 +302,7 @@
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
                                 <div class=""> 
-                                    <table  class="table table-bordered">
+                                    <table  id="lesson2" class="table table-bordered">
                                         <thead>
                                             <tr>
 
@@ -418,31 +314,6 @@
                                         </thead>
                                         <tbody>
                                            
-
-<tr deadline="1422331199"> <!--27 Jan 15, 11.59am-->
-  <td>03, 26+27 Jan</td>
-  <td><a href="cp3101b/lab1.html">Lab1: Not Just Mockup</a></td>
-  <td><a href="cp3101b/css3.html#css-box-model">Lecture4 - CSS3</a> (continued), then <a href="cp3101b/js.html">Lecture5 - JS</a> 
-</tr>
-
-<tr deadline="1422935999"> <!--03 Feb 15, 11.59am-->
-  <td>04, 02+03 Feb</td>
-  <td><a href="cp3101b/lab2.html">Lab2: First Version</a></td>
-  <td><a href="cp3101b/js.html#Recap">Lecture5 - JS</a> (jQuery, HTML5 canvas, and beyond)</a> 
-</tr>
-
-<tr deadline="1423540799"> <!--10 Feb 15, 11.59am-->
-  <td>05, 09+10 Feb</td>
-  <td><a href="cp3101b/lab3.html">Lab3: Requirement Change</a></td>
-  <td><a href="cp3101b/php.html">Lecture6 - PHP</a></td>
-</tr>
-
-<tr deadline="1424145599"> <!--17 Feb 15, 11.59am-->
-  <td>06, 16+17 Feb</td>
-  <td><a href="cp3101b/lab4.html">Lab4: Game Server</a></td>
-  <td><a href="cp3101b/sql.html">Lecture7 - SQL</a> (which ends with PHP integration) 
-  </td>
-</tr>
                                             
                                         </tbody>
                                     </table>
@@ -582,236 +453,18 @@
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
                                 <div class=""> 
-                                    <table  class="table table-bordered" >
+                                    <table id="lecture" class="table table-bordered" >
                                         <thead>
                                             <tr>
 
-                                                <th>Martic Number </th>
+                                                <th>Matric Number </th>
                                                 <th>Name</th>
-                                                <th>Contact info</th>
+                                                <th>Lab Group</th>
                                                 
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td >Lorem ipsum dolor sit amet,</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td><td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-
-                                            </tr>
-                                            <tr>
-                                                <td>Skipping sideways</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                               <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                  
-                                            </tr>
-                                            <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            </tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
-
-                                                <tr>
-                                                <tr>
-                                                <td>Lorem ipsum dolor sit amet, </td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                                                
-                                            <tr>
+                                            
                                                 
                                             
                                         </tbody>
