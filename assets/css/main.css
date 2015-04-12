@@ -13,7 +13,7 @@
 @import url(http://fonts.googleapis.com/css?family=Raleway:400,300,700,900);
 
 /* OVERALL ASPECT */
-/*comment*/
+
 body {
   background-color: #f2f2f2;
     font-family: "Lato";
@@ -59,7 +59,7 @@ p {
 }
 /* Links */
 a {
-    color: #30a689;
+    color: #3dd0ac;
     word-wrap: break-word;
 
     -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
@@ -157,8 +157,8 @@ a:after {
 /* hello */
 #hello {
 	width: 100%;
-	padding-top: 150px;
-	padding-bottom: 250px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
 
 #hello h1 {
@@ -176,15 +176,16 @@ a:after {
 /* Green */
 #green {
 	background-color: #d9d9d9;
-	padding-top: 50px;
-	padding-bottom: 120px
+	padding-top: 0px;
+	padding-bottom: 0px
 	margin-bottom: 0px;
 }
 
 #green1{
-	background-color: #c1c1c1;
-	padding-top: 50px;
-	padding-bottom: 120px
+	background-color: #d9d9d9;
+	padding-left:30px;
+	padding-top: 0px;
+	padding-bottom: 0px;
 	margin-bottom: 0px;
 }
 #greenh3 {
@@ -193,29 +194,32 @@ a:after {
 	margin-bottom: 35px;
 }
 
-/*#green p {
+#green p {
 	color: #000;
-	font-weight: 400;
-	font-size: 20px;
-}*/
+	font-weight: 300;
+	font-size: 16px;
+}
+#12{
+margin-left:100px;
+}
 #sec1,#sec2,#sec3,#sec4,#sec5,#sec6,#sec7,#sec8,#sec9,#sec10,#sec11,#sec12,#sec13{
 	
-	padding-bottom: 110px;
+	padding-bottom: 0px;
 	
 	}
 #sear{
 	float:left
 }
 #Overview{
-	padding-bottom: 200px;
+	padding-bottom: 0px;
 }
 #Info{
 	
-	padding-bottom: 70px;
+	padding-bottom: 0px;
 	}
 #Database{
 	padding-top: 0px;
-	padding-bottom: 70px;
+	padding-bottom: 0px;
 }
 #searchTerm{
 margin-top:10px;

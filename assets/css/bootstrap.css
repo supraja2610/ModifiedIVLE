@@ -632,7 +632,8 @@ dt {
 }
 
 dd {
-  margin-left: 0;
+  margin-left: 30px;
+  
 }
 
 @media (min-width: 768px) {
@@ -783,8 +784,8 @@ pre code {
 }
 
 .container {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 50px;
+  padding-left: 30px;
   margin-right: auto;
   margin-left: auto;
 }
