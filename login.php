@@ -15,10 +15,14 @@ function login(){
 		
 	}	
 	else{
+<<<<<<< HEAD
 		session_start();
 		$_SESSION['login'] = "true";
 		header('Location: http://cp3101b.comp.nus.edu.sg/~suprajas/project/admin.html');
 
+=======
+		header('Location: http://www.cricinfo.com/');
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 	}
 	
 	

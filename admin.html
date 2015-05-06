@@ -37,6 +37,7 @@ month[8] = "Sept";
 month[9] = "Oct";
 month[10] = "Nov";
 month[11] = "Dec";
+<<<<<<< HEAD
 
     $(window).load(function(){
       $.post("checkLogin.php",
@@ -58,6 +59,10 @@ month[11] = "Dec";
       }
       });
      
+=======
+    $(window).load(function(){
+        $('#myModal').modal('show');
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 
         $.post("userEnd.php",
         {
@@ -71,6 +76,7 @@ month[11] = "Dec";
                console.log("lesson:");
                console.log(rows);
                // console.log(rows);
+<<<<<<< HEAD
                //var message = "";
 			   //var newsdisplay = "";
                allweeks();
@@ -93,6 +99,103 @@ month[11] = "Dec";
          
         
         
+=======
+               var message = "";
+               allweeks();
+               newsRows = JSON.parse(all['news']);
+               console.log("news:");
+               console.log(newsRows);
+               for(var i =0; i< newsRows.length; i++){
+				   var row = newsRows[i];
+				   var dateformat =  row['newsDate'];
+				   var date = dateformat.substring(0,11);
+				   var month = dateformat.substring(5,7);
+				   var year = dateformat.substring(0,4);
+				   var dd = dateformat.substring(8,10);
+				   var monthString = "";
+				   var dayString = "";
+				   var day = new Date(parseInt(year), parseInt(month,10)-1, parseInt(dd,10));
+				   
+				   var dayNumber = day.getDay();
+				   switch(dayNumber){
+					case 0: 
+						dayString = "Sunday, ";
+						break;
+					case 1: 
+						dayString = "Monday, ";
+						break;
+					case 2: 
+						dayString = "Tuesday, ";
+						break;
+					case 3: 
+						dayString = "Wednesday, ";
+						break;
+					case 4: 
+						dayString = "Thursday, ";
+						break;
+					case 5: 
+						dayString = "Friday, ";
+						break;
+					case 6: 
+						dayString = "Saturday, ";
+						break;
+					default:
+						dyaString = "Monday, ";
+								   
+				   }
+				   
+				   
+				   switch(parseInt(month,10)){
+					case 1: 
+						monthString = " January ";
+						break;
+					case 2: 
+						monthString = " February ";
+						break;
+					case 3: 
+						monthString = " March ";
+						break;
+					case 4: 
+						monthString = " April ";
+						break;
+					case 5: 
+						monthString = " May ";
+						break;
+					case 6: 
+						monthString = " June ";
+						break;
+					case 7: 
+						monthString = " July ";
+						break;
+					case 8: 
+						monthString = " August ";
+						break;
+					case 9: 
+						monthString = " September ";
+						break;
+					case 10: 
+						monthString = " October ";
+						break;
+					case 11: 
+						monthString = " November ";
+						break;
+					case 12: 
+						monthString = " December ";
+						break;
+					default:
+						monthString = month;
+								   
+				   }
+						   
+					message =  message + "<p> <b>" + dayString + dd + monthString + year + "</b> <br>";
+					message = message + row['content'] + "</p>";
+			   
+         
+        }
+        console.log(message);
+        $('.modal-body').html(message);
+
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
         });
         $.post("userEnd.php",
         {
@@ -115,18 +218,30 @@ month[11] = "Dec";
 		});
     });
     
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
     $(document).ready(function (){
             $("#test1").click(function (){
                 //$(this).animate(function(){
                     $('html, body').animate({
+<<<<<<< HEAD
                         scrollTop: $("#Info").offset().top-70
+=======
+                        scrollTop: $("#Info").offset().top
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                     }, 500);
                 //});
             });
             $("#test2").click(function (){
                 //$(this).animate(function(){
                     $('html, body').animate({
+<<<<<<< HEAD
                         scrollTop: $("#green1").offset().top-70
+=======
+                        scrollTop: $("#Database").offset().top
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                     }, 500);
                 //});
             });
@@ -140,14 +255,22 @@ month[11] = "Dec";
                             }, 500);
                
                 });
+<<<<<<< HEAD
                  $(".ledit").click(function() {
     alert(this.id); // or alert($(this).attr('id'));
 }); 
+=======
+                
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
             
             $("#man").click(function (){
                 //$(this).animate(function(){
                     $('html, body').animate({
+<<<<<<< HEAD
                         scrollTop: $("#Overview").offset().top-70
+=======
+                        scrollTop: $("#Overview").offset().top
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                     }, 500);
                 //});
             });
@@ -165,6 +288,7 @@ month[11] = "Dec";
                     }, 500);
                 //});
             });
+<<<<<<< HEAD
 
     
         });
@@ -328,12 +452,18 @@ function delStudent(matric){
                 $('#lesson2 > tbody:last').append(msg);
 
      }
-    function allweeks(){
-      $('#lesson1 > tbody').empty();
+=======
+            
+        });
+
+      function futureweeks(){
+      $('#lesson3 > tbody').empty();
       var msg = "";
                for(var i=0;i<rows.length;i++){
                 var row = rows[i];
-                msg += '<tr id = "1">';
+                var rw = parseInt(row['weekId'],10);
+                if(rw>=week){
+                msg += "<tr>";
                 // for(var j=0;j<row.length;j++){
                   var d=new Date(row['lectureDate']);
                   col1 = row['weekId'];
@@ -345,10 +475,81 @@ function delStudent(matric){
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+											;
+					
+                // }
+                msg +="</tr>";
+				
+                // console.log(msg);
+               }
+             }
+               $('#lesson3 > tbody:last').append(msg);
+               return true;
+
+    }
+      function thisweek(){
+      $('#lesson2 > tbody').empty();
+      var msg = "";
+               for(var i=0;i<rows.length;i++){
+                var row = rows[i];
+                var rw = parseInt(row['weekId'],10);
+                if(rw>=week-1 && rw<=week+1){
+                msg += "<tr>";
+                // for(var j=0;j<row.length;j++){
+                  var d=new Date(row['lectureDate']);
+                  col1 = row['weekId'];
+                  col1 += ", "+ d.getDate();
+                  d=new Date(row['labDate']);
+                  col1+= "+" + d.getDate();
+                  col1 += " "+month[d.getMonth()];
+                  // console.log(col1);
+                  msg += "<td>"+col1+"</td>";
+                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
+                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+                // }
+                msg +="</tr>";
+				
+                // console.log(msg);
+               }
+             }
+               $('#lesson2 > tbody:last').append(msg);
+
+    }
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
+    function allweeks(){
+      $('#lesson1 > tbody').empty();
+      var msg = "";
+               for(var i=0;i<rows.length;i++){
+                var row = rows[i];
+<<<<<<< HEAD
+                msg += '<tr id = "1">';
+=======
+                msg += "<tr>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
+                // for(var j=0;j<row.length;j++){
+                  var d=new Date(row['lectureDate']);
+                  col1 = row['weekId'];
+                  col1 += ", "+ d.getDate();
+                  d=new Date(row['labDate']);
+                  col1+= "+" + d.getDate();
+                  col1 += " "+month[d.getMonth()];
+                  // console.log(col1);
+                  msg += "<td>"+col1+"</td>";
+                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
+                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+<<<<<<< HEAD
                   msg += '<td id="mass" ><a class=" fa fa-pencil-square-o" type="button" onClick="editClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a></td>'
                    
 
                 msg +="</tr>";
+=======
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+                // }
+                msg +="</tr>";
+                // console.log(msg);
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                }
                $('#lesson1 > tbody:last').append(msg);
     }
@@ -372,7 +573,11 @@ function delStudent(matric){
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</td>";
+<<<<<<< HEAD
 				  msg += '<td id="mass" ><a class=" fa fa-pencil-square-o" type="button" onClick="editClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a></td>'
+=======
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                 // }
                 msg +="</tr>";
                 // console.log(msg);
@@ -382,6 +587,7 @@ function delStudent(matric){
 
     }
 	
+<<<<<<< HEAD
 	function newsAlert(){
 	
 		var message = "";
@@ -581,6 +787,8 @@ function delStudent(matric){
 
     }
 	
+=======
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 	function allStudents(){
 		$('#lecture>tbody').empty();
 		var msg2="";
@@ -593,9 +801,13 @@ function delStudent(matric){
 			msg2+= "<td>" + name + "</td>";
 			var lab=row2['LABNO'];
 			msg2+= "<td>" + lab + "</td>";
+<<<<<<< HEAD
 			var email=row2['EMAIL'];
 			msg2+= "<td>" + email + "</td>";
 			msg2 += '<td id="mass" ><a class=" fa fa-pencil-square-o" type="button" onClick="editLecRoster(\'' + row2['MATNO'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delStudent(\'' + row2['MATNO'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a></td>'
+=======
+			msg2+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 			msg2+="</tr>";
 			
 		}
@@ -628,7 +840,11 @@ function delStudent(matric){
 				msg+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 				
+=======
+				msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 				msg+="</tr>";
 				class1+=1;
 			}
@@ -638,7 +854,11 @@ function delStudent(matric){
 				msg2+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg2+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 				
+=======
+				msg2+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 				msg2+="</tr>";
 				class2+=1;
 			}
@@ -648,7 +868,11 @@ function delStudent(matric){
 				msg3+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg3+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 				
+=======
+				msg3+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 				msg3+="</tr>";
 				class3+=1;
 			}
@@ -738,7 +962,11 @@ function delStudent(matric){
 					msg1+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg1+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 					
+=======
+					msg1+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 					msg1+="</tr>";
 					msg1+=tmp;
 				}
@@ -749,6 +977,10 @@ function delStudent(matric){
 					msg2+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg2+= "<td>" + name + "</td>";
+<<<<<<< HEAD
+=======
+					msg2+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 					msg2+="</tr>";
 					msg2+=tmp;
 				}
@@ -758,7 +990,11 @@ function delStudent(matric){
 					msg3+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg3+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 					
+=======
+					msg3+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 					msg3+="</tr>";
 					msg3+=tmp;
 				}
@@ -792,6 +1028,7 @@ function delStudent(matric){
         <h4 class="modal-title" id="myModalLabel">News</h4>
       </div>
       <div class="modal-body">
+<<<<<<< HEAD
        
       </div>
      
@@ -887,12 +1124,17 @@ Lectured <input type="text" name="lectured" id="lectured">
 <input type="submit" name="submit" value="Answer">
 </p>
 </form> -->
+=======
+        <dt>   Tuesday, 24 March 2015</dt>
+                            <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd>
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
       </div>
      
     </div>
   </div>
 </div>
 
+<<<<<<< HEAD
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -943,6 +1185,8 @@ Lectured <input type="text" name="lectured" id="lectured">
     </div>
   </div>
 </div>
+=======
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 
     
     <!-- Fixed navbar -->
@@ -959,11 +1203,19 @@ Lectured <input type="text" name="lectured" id="lectured">
         </div>
         <div class="navbar-collapse collapse" id="navbar">
       <ul class="nav navbar-nav">
+<<<<<<< HEAD
         
         <li><a id="test2">News</a></li>
         <li><a id="test3">Lesson Plan</a></li>
         <li><a id="test4">Class Roster</a></li>
         
+=======
+        <li><a id="test1">Intro</a></li>
+        <li><a id="test2">News</a></li>
+        <li><a id="test3">Lesson Plan</a></li>
+        <li><a id="test4">Class Roster</a></li>
+        <li><a href="/~suprajas/project/login.php">Admin Sign In</a></li>
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
         
 
         
@@ -995,7 +1247,29 @@ Lectured <input type="text" name="lectured" id="lectured">
     
  </div>
   
+<<<<<<< HEAD
 	
+=======
+	<div id="green">
+		<div id="12" class="container">
+			<div class="row">
+				
+				<h2><b>Inroduction</b></h2>
+                <hr align="center" width="100%" size="5">
+				<div class="col-lg-15 centered">
+					<p >I (Dr Steven Halim) have the experience of creating a (simple and static) personal website since year 2000 and the highly successful VisuAlgo: algorithm visualization and animation website since 2011. However, I am still learning the latest web development techniques as of year 2014-2015. In Semester 2 (Jan-Apr 2015) of this Academic Year (AY) 2014/15, I am assigned to teach this new module CP3101B - Web Programming and Applications Show the official module description with Steven's improvisation. This revamped "World of Seven" website and in particular this single -- all-in "cp3101b.html" webpage will be the main page of CP3101B*.
+
+                        I started this page on Monday, 30 June 2014 and since then I gradually update this page with the contents of my version of CP3101B. The starting version (of my version) of CP3101B is the one created by Arnold Rosenbloom, a visiting lecturer from University of Toronto, Canada who taught the first edition of CP3101B in NUS in Jan-Apr 2014. Due to different background and expertise, my version will be necessarily different from Arnold's version. If you are a current/prospective CP3101B student in Semester 2 of AY2014/2015, please bookmark this webpage and occassionally check for updates :).</p>
+                   <hr align="center" width="100%" size="5">
+                   
+        			
+        			
+				</div>
+			</div>
+		</div>
+		<div id="Database"></div>
+	</div>
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 
 
     <div id="green1">
@@ -1003,12 +1277,16 @@ Lectured <input type="text" name="lectured" id="lectured">
             <div class="row">
                 
                 <h2><b>News</b></h3>
+<<<<<<< HEAD
                   <button type='button' class='btn btn-theme glyphicon glyphicon-plus' onclick="addNews()" >&nbspAdd News</button><br><br>
+=======
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                     <hr align="center" width="100%" size="5">
 
                 <div class="col-lg-15 centered">
 
                    <dl class="dl-horizontal">
+<<<<<<< HEAD
                             <!-- <dt>Tuesday, 24 March 2015</dt>
                             <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd>
 							<a class=" fa fa-pencil-square-o" type="button" onClick="editNews()" data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a><br><br>
@@ -1020,6 +1298,16 @@ Lectured <input type="text" name="lectured" id="lectured">
                             We will have a lecture about short (~30 minutes) case study of VisuAlgo; The short Lecture Notes will be uploaded on the day itself; A few parts of this short lecture will be examinable.</dd>
 							<a class=" fa fa-pencil-square-o" type="button" onClick="editNews()"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Delete" ></a><br><br> -->
                           
+=======
+                            <dt>   Tuesday, 24 March 2015</dt>
+                            <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd><br>
+                            <dt>Monday, 23 March 2015</dt>
+                            <dd>Bookmark and visit CP3101B project webpage at least once a week to see your team's health (color coded) and other team's progress too.</dd><br>
+                            <dt>Sunday, 22 March 2015</dt>
+                            <dd>The list of milestones and deliverables to get (easy?) 1% on your last 4 lab sessions: Lab8-11 is updated directly at our course project page; These checkpoints will help Steven, Peter, and Yang Shun to keep track of your team's progress.
+                            We will have a lecture about short (~30 minutes) case study of VisuAlgo; The short Lecture Notes will be uploaded on the day itself; A few parts of this short lecture will be examinable.<br>
+                            
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                         </dl><br>
                     <hr align="center" width="100%" size="5">
                     
@@ -1183,11 +1471,18 @@ Lectured <input type="text" name="lectured" id="lectured">
                         </ul> 
 
                         <div class="tab-content">
+<<<<<<< HEAD
                           <button type='button' class='btn btn-theme glyphicon glyphicon-upload' onclick="Upload()">&nbspUpload Roster</button>&nbsp&nbsp&nbsp
 						  <button type='button' class='btn btn-theme glyphicon glyphicon-plus' onclick="addStudent()" >&nbspAdd New Student</button><br><br>
                             <div id="dropdownL" class="tab-pane active">
                                <!-- <h2><b>Lecture Roster</b></h2> -->
                                
+=======
+
+                            <div id="dropdownL" class="tab-pane active">
+                               <!-- <h2><b>Lecture Roster</b></h2> -->
+
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                                 
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
@@ -1199,7 +1494,11 @@ Lectured <input type="text" name="lectured" id="lectured">
                                                 <th>Matric Number </th>
                                                 <th>Name</th>
                                                 <th>Lab group</th>
+<<<<<<< HEAD
                                                 <th>Email</th>
+=======
+                                                
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                                             </tr>
                                         </thead>
                                         <tbody>

@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 session_start();
 
 if (empty($_SESSION['visitcount'])) {
@@ -17,6 +18,22 @@ else {
 	$unixtime = $_SESSION['time'] ;
 	$_SESSION['time'] = date('Y-m-d H:i:s',strtotime('+0 hour ',strtotime($unixtime)));
   
+=======
+
+session_start();
+$_SESSION['time'] = date('Y-m-d h:i:s');
+$time = $_SESSION['time'];
+
+if (empty($_SESSION['visitcount'])) {
+  $_SESSION['visitcount'] = 1;
+  $_SESSION['visittime'] = date('Y-m-d h:i:s');
+  $time = '2010-05-24 21:00:00';
+}
+else {
+  $_SESSION['visitcount']++;
+  $time = $_SESSION['visittime'];
+  $_SESSION['visittime'] = date('Y-m-d h:i:s');
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 }
 
 
@@ -29,8 +46,12 @@ if($_POST['cmd'] == "load"){
   
   $ret1 = is_best_score();
   $ret2 = DisplayNewsContent($time);
+<<<<<<< HEAD
   $ret3 = getAllNews();
   $retVal = array('lesson'=>$ret1, 'news'=>$ret2, 'allNews' => $ret3);
+=======
+  $retVal = array('lesson'=>$ret1, 'news'=>$ret2);
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
   echo json_encode($retVal);
 }
         
@@ -60,6 +81,7 @@ function is_best_score() {
     
 }
 
+<<<<<<< HEAD
 function getAllNews() {  
   global $db; // refer to the global variable 'db'
   $table_name = "news";
@@ -83,6 +105,8 @@ function getAllNews() {
 }
 
 
+=======
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 function DisplayNewsContent($timestamp) {  
   global $db; // refer to the global variable 'db'
   $table_name = "news";

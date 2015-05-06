@@ -24,15 +24,19 @@
     <script src="assets/js/chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
+<<<<<<< HEAD
 	
 	
 	
 	
 	
+=======
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
     var rows;
 
         var month = new Array();
         var week;
+<<<<<<< HEAD
 		
 		month[0] = "Jan";
 		month[1] = "Feb";
@@ -58,12 +62,30 @@
                week = parseInt(data,10);
         });
 		
+=======
+month[0] = "Jan";
+month[1] = "Feb";
+month[2] = "Mar";
+month[3] = "Apr";
+month[4] = "May";
+month[5] = "Jun";
+month[6] = "Jul";
+month[7] = "Aug";
+month[8] = "Sept";
+month[9] = "Oct";
+month[10] = "Nov";
+month[11] = "Dec";
+    $(window).load(function(){
+        $('#myModal').modal('show');
+
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
         $.post("userEnd.php",
         {
                 cmd: "load"
         },
         function(data){
               var all = JSON.parse(data);
+<<<<<<< HEAD
               
 
                rows = JSON.parse(all['lesson']);
@@ -126,6 +148,131 @@
 		});
     });
     
+=======
+              console.log(all);
+
+               rows = JSON.parse(all['lesson']);
+               console.log("lesson:");
+               console.log(rows);
+               // console.log(rows);
+               var message = "";
+               allweeks();
+               newsRows = JSON.parse(all['news']);
+               console.log("news:");
+               console.log(newsRows);
+               for(var i =0; i< newsRows.length; i++){
+				   var row = newsRows[i];
+				   var dateformat =  row['newsDate'];
+				   var date = dateformat.substring(0,11);
+				   var month = dateformat.substring(5,7);
+				   var year = dateformat.substring(0,4);
+				   var dd = dateformat.substring(8,10);
+				   var monthString = "";
+				   var dayString = "";
+				   var day = new Date(parseInt(year), parseInt(month,10)-1, parseInt(dd,10));
+				   
+				   var dayNumber = day.getDay();
+				   switch(dayNumber){
+					case 0: 
+						dayString = "Sunday, ";
+						break;
+					case 1: 
+						dayString = "Monday, ";
+						break;
+					case 2: 
+						dayString = "Tuesday, ";
+						break;
+					case 3: 
+						dayString = "Wednesday, ";
+						break;
+					case 4: 
+						dayString = "Thursday, ";
+						break;
+					case 5: 
+						dayString = "Friday, ";
+						break;
+					case 6: 
+						dayString = "Saturday, ";
+						break;
+					default:
+						dyaString = "Monday, ";
+								   
+				   }
+				   
+				   
+				   switch(parseInt(month,10)){
+					case 1: 
+						monthString = " January ";
+						break;
+					case 2: 
+						monthString = " February ";
+						break;
+					case 3: 
+						monthString = " March ";
+						break;
+					case 4: 
+						monthString = " April ";
+						break;
+					case 5: 
+						monthString = " May ";
+						break;
+					case 6: 
+						monthString = " June ";
+						break;
+					case 7: 
+						monthString = " July ";
+						break;
+					case 8: 
+						monthString = " August ";
+						break;
+					case 9: 
+						monthString = " September ";
+						break;
+					case 10: 
+						monthString = " October ";
+						break;
+					case 11: 
+						monthString = " November ";
+						break;
+					case 12: 
+						monthString = " December ";
+						break;
+					default:
+						monthString = month;
+								   
+				   }
+						   
+					message =  message + "<p> <b>" + dayString + dd + monthString + year + "</b> <br>";
+					message = message + row['content'] + "</p>";
+			   
+         
+        }
+        console.log(message);
+        $('.modal-body').html(message);
+
+        });
+        $.post("userEnd.php",
+        {
+                cmd: "getweek"
+        },
+        function(data){
+            console.log(data);
+               week = parseInt(data,10);
+        });
+		
+		$.post("roster.php",
+		{
+			cmd:"load"
+		},
+		function(data){
+			console.log(data);
+			lectureRows=JSON.parse(data);
+			allStudents();
+			
+		});
+    });
+    
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
     
     $(document).ready(function (){
 						
@@ -182,6 +329,7 @@
 			
             
         });
+<<<<<<< HEAD
 		$(function () {
 			if($(window).width()<500){
 				condensed();
@@ -195,6 +343,12 @@
       $('#lesson3 > tbody').empty();
       var msg = "";
 	  var head="";
+=======
+
+      function futureweeks(){
+      $('#lesson3 > tbody').empty();
+      var msg = "";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                for(var i=0;i<rows.length;i++){
                 var row = rows[i];
                 var rw = parseInt(row['weekId'],10);
@@ -211,8 +365,13 @@
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+<<<<<<< HEAD
 				  
 											
+=======
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+											;
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 					
                 // }
                 msg +="</tr>";
@@ -220,18 +379,27 @@
                 // console.log(msg);
                }
              }
+<<<<<<< HEAD
 			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
                $('#lesson3 > thead:last').append(head);
 			   $('#lesson3 > tbody:last').append(msg);
+=======
+               $('#lesson3 > tbody:last').append(msg);
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                return true;
 
     }
       function thisweek(){
+<<<<<<< HEAD
 	  localStorage.setItem("clickedLesson","weekView");
 	  $('#lesson2>thead').empty();
       $('#lesson2 > tbody').empty();
       var msg = "";
 	  var head="";
+=======
+      $('#lesson2 > tbody').empty();
+      var msg = "";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                for(var i=0;i<rows.length;i++){
                 var row = rows[i];
                 var rw = parseInt(row['weekId'],10);
@@ -248,13 +416,18 @@
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+<<<<<<< HEAD
 				 
+=======
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                 // }
                 msg +="</tr>";
 				
                 // console.log(msg);
                }
              }
+<<<<<<< HEAD
 			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
                $('#lesson2 > thead:last').append(head);
 			   $('#lesson2 > tbody:last').append(msg);
@@ -266,6 +439,14 @@
       $('#lesson1 > tbody').empty();
       var msg = "";
 	  var head="";
+=======
+               $('#lesson2 > tbody:last').append(msg);
+
+    }
+    function allweeks(){
+      $('#lesson1 > tbody').empty();
+      var msg = "";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                for(var i=0;i<rows.length;i++){
                 var row = rows[i];
                 msg += "<tr>";
@@ -280,11 +461,16 @@
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+<<<<<<< HEAD
 				  
+=======
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                 // }
                 msg +="</tr>";
                 // console.log(msg);
                }
+<<<<<<< HEAD
 			   head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
                $('#lesson1 > thead:last').append(head);
 			   $('#lesson1 > tbody:last').append(msg);
@@ -296,6 +482,14 @@
       $('#lesson4 > tbody').empty();
       var msg = "";
 	  var head="";
+=======
+               $('#lesson1 > tbody:last').append(msg);
+    }
+
+    function condensed(){
+      $('#lesson4 > tbody').empty();
+      var msg = "";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                for(var i=0;i<rows.length;i++){
                 var row = rows[i];
                 var rw = parseInt(row['weekId'],10);
@@ -312,12 +506,17 @@
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</td>";
+<<<<<<< HEAD
 				  
+=======
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                 // }
                 msg +="</tr>";
                 // console.log(msg);
                }
              }
+<<<<<<< HEAD
 			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
                $('#lesson4 > thead:last').append(head);
 			   $('#lesson4 > tbody:last').append(msg);
@@ -521,15 +720,23 @@
 		console.log(newsdisplay);
 		$('.dl-horizontal').html(newsdisplay);
 		
+=======
+               $('#lesson4 > tbody:last').append(msg);
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 
     }
 	
 	function allStudents(){
+<<<<<<< HEAD
 		localStorage.setItem("clicked","allView");
 		$('#lecture>tbody').empty();
 		$('#lecture>thead').empty();
 		var msg2="";
 		var head="";
+=======
+		$('#lecture>tbody').empty();
+		var msg2="";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 		for (var i=0;i<lectureRows.length;i++){
 			var row2=lectureRows[i];
 			msg2+="<tr>";
@@ -539,6 +746,7 @@
 			msg2+= "<td>" + name + "</td>";
 			var lab=row2['LABNO'];
 			msg2+= "<td>" + lab + "</td>";
+<<<<<<< HEAD
 			var email=row2['EMAIL'];
 			msg2+="<td>" +email+"</td>";
 			
@@ -547,12 +755,21 @@
 		}
 		head+="<tr><th>Matric No</th><th>Name</th><th>Lab Group</th><th>Email</th></tr>";
 		$('#lecture>thead:last').append(head);
+=======
+			msg2+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+			msg2+="</tr>";
+			
+		}
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 		$('#lecture>tbody:last').append(msg2);
 	
 	}
 	
 	function labRoster(){
+<<<<<<< HEAD
 		localStorage.setItem("clicked","labView");
+=======
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 		$('#lab1>tbody').empty();
 		$('#lab2>tbody').empty();
 		$('#lab3>tbody').empty();
@@ -577,7 +794,11 @@
 				msg+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 				
+=======
+				msg+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 				msg+="</tr>";
 				class1+=1;
 			}
@@ -587,7 +808,11 @@
 				msg2+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg2+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 				
+=======
+				msg2+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 				msg2+="</tr>";
 				class2+=1;
 			}
@@ -597,7 +822,11 @@
 				msg3+= "<td>" + mat + "</td>";
 				var name=row['NAME'];
 				msg3+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 				
+=======
+				msg3+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 				msg3+="</tr>";
 				class3+=1;
 			}
@@ -615,7 +844,10 @@
 	}
 	
 	function projectRoster(){
+<<<<<<< HEAD
 		localStorage.setItem("clicked","projectView");
+=======
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 		$('#project1>thead').empty();
 		$('#project2>thead').empty();
 		$('#project3>thead').empty();
@@ -688,7 +920,11 @@
 					msg1+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg1+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 					
+=======
+					msg1+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 					msg1+="</tr>";
 					msg1+=tmp;
 				}
@@ -699,7 +935,11 @@
 					msg2+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg2+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 					
+=======
+					msg2+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 					msg2+="</tr>";
 					msg2+=tmp;
 				}
@@ -709,7 +949,11 @@
 					msg3+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg3+= "<td>" + name + "</td>";
+<<<<<<< HEAD
 					
+=======
+					msg3+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
 					msg3+="</tr>";
 					msg3+=tmp;
 				}
@@ -776,11 +1020,19 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar">
       <ul class="nav navbar-nav">
+<<<<<<< HEAD
         <li><a id="test1" onclick="ga('send', 'event', 'Intro','click');">Intro</a></li>
         <li><a id="test2" onclick="ga('send', 'event', 'News','click');">News</a></li>
         <li><a id="test3" onclick="ga('send', 'event', 'Lesson Plan','click');">Lesson Plan</a></li>
         <li><a id="test4" onclick="ga('send', 'event', 'Class Roster','click');">Class Roster</a></li>
         <li><a href="/~suprajas/project/2010">CS2010</a></li>
+=======
+        <li><a id="test1">Intro</a></li>
+        <li><a id="test2">News</a></li>
+        <li><a id="test3">Lesson Plan</a></li>
+        <li><a id="test4">Class Roster</a></li>
+        <li><a href="/~suprajas/project/login.php">Admin Sign In</a></li>
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
         
 
         
@@ -873,12 +1125,21 @@
                                 <h2><b>Lesson Plan</b></h2>
 
                                 <hr align="center" width="100%" size="5"><br>
+<<<<<<< HEAD
                                 <ul id="smash" class="nav nav-tabs nav-justified">
                          <li><a data-toggle="tab" class = "active" href="#dropdown4" onclick="ga('send', 'event', 'All Weeks','click'); return allweeks();"><h4>All weeks</h4></a></li>
                                     <li><a data-toggle="tab" class = "active" href="#dropdown5" onclick="ga('send', 'event', 'This week','click'); return thisweek();"><h4>This week</h4></a></li>
 
                                     <li><a data-toggle="tab" class = "active" href="#dropdown6 " onclick="ga('send', 'event', 'Future Weeks','click'); return futureweeks();"><h4>Future weeks</h4></a></li>
                                     <li><a data-toggle="tab" class = "active" href="#dropdown7" onclick="ga('send', 'event', 'Condensed View','click'); return condensed();"><h4>Condensed view</h4></a></li>
+=======
+                                <ul class="nav nav-tabs nav-justified">
+                         <li><a data-toggle="tab" class = "active" href="#dropdown4"><h4>All weeks</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown5" onclick="return thisweek();"><h4>This week</h4></a></li>
+
+                                    <li><a data-toggle="tab" href="#dropdown6 " onclick="return futureweeks();"><h4>Future weeks</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown7" onclick="return condensed();"><h4>Condensed view</h4></a></li>
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                         </ul>
                          <div class="tab-content">
 
@@ -981,9 +1242,15 @@
   <li role="presentation"><a href="#"><h3>Messages<h3></a></li>
                         </ul> -->
                         <ul class="nav nav-tabs nav-justified">
+<<<<<<< HEAD
                          <li><a data-toggle="tab"  href="#dropdownL" class="active" onclick="ga('send', 'event', 'Lecture Roster','click'); return allStudents();"><h4>Lecture Roster</h4></a></li>
                                     <li><a data-toggle="tab"  href="#dropdown2" class="active" onclick="ga('send', 'event', 'Lab Roster','click'); return labRoster();"><h4>Lab Roster</h4></a></li>
                                     <li><a data-toggle="tab"  href="#dropdown3" class="active" onclick="ga('send', 'event', 'Project Roster','click'); return projectRoster();"><h4>Project Roster</h4></a></li>
+=======
+                         <li><a data-toggle="tab" class = "active" href="#dropdownL"><h4>Lecture Roster</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown2" onclick="return labRoster();"><h4>Lab Roster</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown3" onclick="return projectRoster();"><h4>Project Roster</h4></a></li>
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                         </ul> 
 
                         <div class="tab-content">
@@ -997,7 +1264,17 @@
                                 <div class=""> 
                                     <table id="lecture" class="table table-bordered" >
                                         <thead>
+<<<<<<< HEAD
                                             
+=======
+                                            <tr>
+
+                                                <th>Matric Number </th>
+                                                <th>Name</th>
+                                                <th>Lab group</th>
+                                                
+                                            </tr>
+>>>>>>> 04d3620f4561df5219bd58c21a37faf18aea2f00
                                         </thead>
                                         <tbody>
                                             
