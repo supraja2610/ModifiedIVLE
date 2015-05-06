@@ -8,9 +8,6 @@
     <meta name="author" content="">
 
     <title>CP3101B</title>
-    <link rel="icon" 
-      type="image/png" 
-      href="logo.png">
     <link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -24,73 +21,61 @@
     <script src="assets/js/chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
-	
-	
-	
-	
-	
     var rows;
 
         var month = new Array();
         var week;
-		
-		month[0] = "Jan";
-		month[1] = "Feb";
-		month[2] = "Mar";
-		month[3] = "Apr";
-		month[4] = "May";
-		month[5] = "Jun";
-		month[6] = "Jul";
-		month[7] = "Aug";
-		month[8] = "Sept";
-		month[9] = "Oct";
-		month[10] = "Nov";
-		month[11] = "Dec";
-		
+month[0] = "Jan";
+month[1] = "Feb";
+month[2] = "Mar";
+month[3] = "Apr";
+month[4] = "May";
+month[5] = "Jun";
+month[6] = "Jul";
+month[7] = "Aug";
+month[8] = "Sept";
+month[9] = "Oct";
+month[10] = "Nov";
+month[11] = "Dec";
+
     $(window).load(function(){
+      $.post("checkLogin.php",
+      {
+
+      },
+      function(data){
+        console.log("1: *******");
+        console.log(data);
+        var testDat = String(data);
+        console.log(testDat);
+        if(localStorage.getItem("loggedIn") == "Yes"){
+
+        }else{
+        if( testDat == "False"){
+          localStorage.setItem("loggedIn","Yes");
+          window.location.href = "http://cp3101b.comp.nus.edu.sg/~suprajas/project/login.html";
+        }
+      }
+      });
      
-		$.post("userEnd.php",
-        {
-                cmd: "getweek"
-        },
-        function(data){
-            console.log(data);
-               week = parseInt(data,10);
-        });
-		
+
         $.post("userEnd.php",
         {
                 cmd: "load"
         },
         function(data){
               var all = JSON.parse(data);
-              
+              console.log(all);
 
                rows = JSON.parse(all['lesson']);
-               if (week==null){
-				week=7;
-			   }
-			   console.log(week);
-               console.log(localStorage.getItem("clickedLesson"));
-			   if(localStorage.getItem("clickedLesson")=="futureView"){
-				
-				futureweeks();
-			}
-			else if(localStorage.getItem("clickedLesson")=="weekView"){
-				
-				thisweek();
-			}
-			else if(localStorage.getItem("clickedLesson")=="condensedView"){
-				
-				condensed();
-			}
-			else{
-			
-				allweeks();
-			}
+               console.log("lesson:");
+               console.log(rows);
+               // console.log(rows);
+               //var message = "";
+			   //var newsdisplay = "";
+               allweeks();
 			   
-			   
-               allNews = JSON.parse(all['allNews']);
+			   allNews = JSON.parse(all['allNews']);
 			   console.log("allnews:");
                console.log(allNews);
 			   displayAllNews();
@@ -99,8 +84,23 @@
 			   console.log("news:");
                console.log(newsRows);
 			   newsAlert();
-    
-
+			   
+			   
+               
+              
+					//newsdisplay += "<a class=" fa fa-pencil-square-o" type="button" onClick="editNews()" data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a><br><br>"
+			   
+         
+        
+        
+        });
+        $.post("userEnd.php",
+        {
+                cmd: "getweek"
+        },
+        function(data){
+            console.log(data);
+               week = parseInt(data,10);
         });
 		
 		$.post("roster.php",
@@ -108,41 +108,26 @@
 			cmd:"load"
 		},
 		function(data){
-			
+			console.log(data);
 			lectureRows=JSON.parse(data);
-			if(localStorage.getItem("clicked")=="labView"){
-				
-				labRoster();
-			}
-			else if(localStorage.getItem("clicked")=="projectView"){
-				
-				projectRoster();
-			}
-			else{
-			
-				allStudents();
-			}
+			allStudents();
 			
 		});
     });
     
-    
     $(document).ready(function (){
-						
             $("#test1").click(function (){
                 //$(this).animate(function(){
                     $('html, body').animate({
                         scrollTop: $("#Info").offset().top-70
                     }, 500);
-					$('#green').show();
                 //});
             });
             $("#test2").click(function (){
                 //$(this).animate(function(){
                     $('html, body').animate({
-                        scrollTop: $("#Database").offset().top-70
+                        scrollTop: $("#green1").offset().top-70
                     }, 500);
-					
                 //});
             });
             
@@ -151,11 +136,13 @@
                 //$(this).animate(function(){
                         
                             $('html, body').animate({
-                                scrollTop: $("#sec1").offset().top-70
+                                scrollTop: $("#sec1").offset().top
                             }, 500);
                
                 });
-                
+                 $(".ledit").click(function() {
+    alert(this.id); // or alert($(this).attr('id'));
+}); 
             
             $("#man").click(function (){
                 //$(this).animate(function(){
@@ -167,108 +154,186 @@
             $("#temp1").click(function (){
                 //$(this).animate(function(){
                     $('html, body').animate({
-                        scrollTop: $("#sec1").offset().top-70
+                        scrollTop: $("#sec1").offset().top
                     }, 500);
                 //});
             });
             $("#test4").click(function (){
                 //$(this).animate(function(){
                     $('html, body').animate({
-                        scrollTop: $("#sec2").offset().top-70
+                        scrollTop: $("#sec2").offset().top
                     }, 500);
                 //});
             });
-			
-			
-            
+
+    
         });
-		$(function () {
-			if($(window).width()<500){
-				condensed();
-				$('#smash li:eq(3) a').tab('show');
-			}
-      			
-   			});
-      function futureweeks(){
-	  localStorage.setItem("clickedLesson","futureView");
-	  $('#lesson3>thead').empty();
+function editNews(content,date){
+
+	$('#editModal1').find('.modal-body').html('<form method="post" action="editNews.php"><p><b>Edit News</b><br><br> Date <input type="text" name="time" value="'+date+'" id="time" readonly><br><br> News <input type="text" name="newscontent" value="'+content+'" id="newscontent"><br><br> <button  class="btn btn-theme" type="submit" name="submit">Confirm Edit</button></p>');
+	$('#editModal1').modal('show');
+}
+function editClick(a){
+	console.log("Hi");
+	console.log(a);
+	
+	$('#editModal').find('.modal-body').html('<form method="post" action="editLesson2.php"><p><b>Edit details</b><br><br> Week &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" name="week" value="'+a+'" id="week"><br><br> Lab title &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" name="labt" id="labt"> <br><br>Lecture Title&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <input type="text" name="lecturet" id="lecturet"> <br><br> Lab Details&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <input type="text" name="labd" id="labd"> <br> <br> Lecture Details&nbsp <input type="text" name="lectured" id="lectured"><br><br> <button  class="btn btn-theme" type="submit" name="submit">Confirm Edit</button></p>');
+	$('#editModal').modal('show');
+
+}
+
+function editLecRoster(number){
+  console.log("Hi");
+  
+  
+  $('#editModal4').find('.modal-body').html('<form method="post" action="editStudent.php"><p>Matric Number&nbsp&nbsp<input type="text" name="number" value="'+number+'" id="number" readonly><br><br><b>Edit details</b><br><br>Matric No.&nbsp &nbsp<input type="text" name="Matric" id="Matric"><br><br>Name&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp&nbsp<input type="text" name="StudentName" id="StudentName"><br><br> Lab Group&nbsp&nbsp&nbsp<input type="text" name="lab" id="lab"><br><br> Project No&nbsp&nbsp&nbsp<input type="text" name="project" id="project"><br><br>Email&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp&nbsp&nbsp<input type="text" name="email" id="email"><br><br> <button  class="btn btn-theme" type="submit" name="submit">Confirm Edit</button></p>');
+  $('#editModal4').modal('show');
+
+}
+
+function Upload(){
+  console.log("Hi");
+  
+  
+  $('#uploadModal').find('.modal-body').html('<form enctype="multipart/form-data" method="post" action="upload.php"><p>Upload CSV File<input type="file" name="filename" id="filename"><br><br> <button  class="btn btn-theme" type="submit" name="submit">Upload</button></p>');
+  $('#uploadModal').modal('show');
+
+}
+
+function addStudent(){
+  console.log("Hi");
+  
+  
+  $('#addModal').find('.modal-body').html('<form method="post" action="addStudent.php"><p><b>Add Student</b><br><br>Matric No.&nbsp &nbsp<input type="text" name="Matric" id="Matric"><br><br>Name&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp&nbsp<input type="text" name="StudentName" id="StudentName"><br><br> Lab Group&nbsp&nbsp&nbsp<input type="text" name="lab" id="lab"><br><br> Project No&nbsp&nbsp&nbsp<input type="text" name="project" id="project"><br><br>Email&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp&nbsp&nbsp<input type="text" name="email" id="email"><br><br> <button  class="btn btn-theme" type="submit" name="submit">Add</button></p>');
+  $('#addModal').modal('show');
+
+}
+function addNews(){
+  console.log("Hi");
+  
+  
+  $('#addModal').find('.modal-body').html('<form method="post" action="addNews.php"><p><b>Add News</b><br><br>News&nbsp &nbsp<input type="text" name="ADDNEWS" id="ADDNEWS"><br><br> <button  class="btn btn-theme" type="submit" name="submit">Add</button></p>');
+  $('#addModal').modal('show');
+
+}
+function delClick(a){
+	$.post("delLesson.php",
+        {
+                week: a,
+                
+        },
+        function(data){
+              //  table = JSON.parse(data);
+              console.log(data);
+              location.reload();
+        });
+
+}
+
+function delNews(a){
+	$.post("delNews.php",
+        {
+                time: a,
+                
+        },
+        function(data){
+              //  table = JSON.parse(data);
+              console.log(data);
+              location.reload();
+        });
+
+}
+
+function delStudent(matric){
+	$.post("delStudent.php",
+        {
+                matno: matric,
+                
+        },
+        function(data){
+              //  table = JSON.parse(data);
+              console.log(data);
+              location.reload();
+        });
+
+}
+
+// $(function() { 
+// $("ledit").on("click", function() {
+//             	console.log("Hi: ");
+//             	var $row = $(this).parent().parent();
+
+//             	// var r = parseInt($(this).id, 10);
+//             	console.log(row);
+//             });
+// });
+    function futureweeks(){
       $('#lesson3 > tbody').empty();
       var msg = "";
-	  var head="";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                var rw = parseInt(row['weekId'],10);
+                for(var i=0;i<rows.length;i++){
+               var row = rows[i];
+                 var rw = parseInt(row['weekId'],10);
                 if(rw>=week){
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
+                 msg += "<tr r = '1'>";
+                 for(var j=0;j<row.length;j++){
+                   var d=new Date(row['lectureDate']);
                   col1 = row['weekId'];
                   col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
+                   d=new Date(row['labDate']);
+                   col1+= "+" + d.getDate();
+                   col1 += " "+month[d.getMonth()];
+                   // console.log(col1);
+                   msg += "<td>"+col1+"</td>";
+                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				  
-											
+			   msg += '<td id="mass" ><a class=" fa fa-pencil-square-o" type="button" onClick="editClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a></td>'
+											;
 					
-                // }
-                msg +="</tr>";
+                }
+               msg +="</tr>";
 				
                 // console.log(msg);
                }
-             }
-			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
-               $('#lesson3 > thead:last').append(head);
-			   $('#lesson3 > tbody:last').append(msg);
-               return true;
+            }
+              $('#lesson3 > tbody:last').append(msg);
+              return true;
 
     }
       function thisweek(){
-	  localStorage.setItem("clickedLesson","weekView");
-	  $('#lesson2>thead').empty();
-      $('#lesson2 > tbody').empty();
-      var msg = "";
-	  var head="";
+       $('#lesson2 > tbody').empty();
+       var msg = "";
                for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                var rw = parseInt(row['weekId'],10);
-                if(rw>=week-1 && rw<=week+1){
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
+                 var row = rows[i];
+                 var rw = parseInt(row['weekId'],10);
+                 if(rw>=week-1 && rw<=week+1){
+                 msg += "<tr>";
+                  for(var j=0;j<row.length;j++){
+                   var d=new Date(row['lectureDate']);
+                   col1 = row['weekId'];
+                   col1 += ", "+ d.getDate();
+                   d=new Date(row['labDate']);
                   col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
+                 col1 += " "+month[d.getMonth()];
+                   // console.log(col1);
+                   msg += "<td>"+col1+"</td>";
+                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				 
-                // }
-                msg +="</tr>";
+				msg += '<td id="mass" ><a class=" fa fa-pencil-square-o" type="button" onClick="editClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a></td>'
+                  }
+                 msg +="</tr>";
 				
                 // console.log(msg);
-               }
              }
-			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
-               $('#lesson2 > thead:last').append(head);
-			   $('#lesson2 > tbody:last').append(msg);
+              }
+                $('#lesson2 > tbody:last').append(msg);
 
-    }
+     }
     function allweeks(){
-	  localStorage.setItem("clickedLesson","lessonView");
-	  $('#lesson1>thead').empty();
       $('#lesson1 > tbody').empty();
       var msg = "";
-	  var head="";
                for(var i=0;i<rows.length;i++){
                 var row = rows[i];
-                msg += "<tr>";
+                msg += '<tr id = "1">';
                 // for(var j=0;j<row.length;j++){
                   var d=new Date(row['lectureDate']);
                   col1 = row['weekId'];
@@ -280,22 +345,17 @@
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				  
-                // }
+                  msg += '<td id="mass" ><a class=" fa fa-pencil-square-o" type="button" onClick="editClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a></td>'
+                   
+
                 msg +="</tr>";
-                // console.log(msg);
                }
-			   head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
-               $('#lesson1 > thead:last').append(head);
-			   $('#lesson1 > tbody:last').append(msg);
+               $('#lesson1 > tbody:last').append(msg);
     }
 
     function condensed(){
-	localStorage.setItem("clickedLesson","condensedView");
-	  $('#lesson4>thead').empty();
       $('#lesson4 > tbody').empty();
       var msg = "";
-	  var head="";
                for(var i=0;i<rows.length;i++){
                 var row = rows[i];
                 var rw = parseInt(row['weekId'],10);
@@ -312,18 +372,15 @@
                   msg += "<td>"+col1+"</td>";
                   msg += "<td><b>"+row['labTitle']+"</td>";
                   msg += "<td><b>"+row['lectureTitle']+"</td>";
-				  
+				  msg += '<td id="mass" ><a class=" fa fa-pencil-square-o" type="button" onClick="editClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a></td>'
                 // }
                 msg +="</tr>";
                 // console.log(msg);
                }
              }
-			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
-               $('#lesson4 > thead:last').append(head);
-			   $('#lesson4 > tbody:last').append(msg);
+               $('#lesson4 > tbody:last').append(msg);
 
     }
-	
 	
 	function newsAlert(){
 	
@@ -511,9 +568,9 @@
 				   }						   
 				
 					newsdisplay += "<dt>" + dayString + dd + monthString + year + "</dt>";
-					newsdisplay += "<dd>" + row['content'] + "</dd><br>";
-					//newsdisplay += '<a class=" fa fa-pencil-square-o" type="button" onClick="editNews(\'' + row['content'] + '\', \'' + row['newsDate'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delNews(\'' + row['newsDate'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a><br><br>'
-					//newsdisplay += "</dd>"
+					newsdisplay += "<dd>" + row['content'] + "</dd><br> <dd>";
+					newsdisplay += '<a class=" fa fa-pencil-square-o" type="button" onClick="editNews(\'' + row['content'] + '\', \'' + row['newsDate'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delNews(\'' + row['newsDate'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a><br><br>'
+					newsdisplay += "</dd>"
          
         }
         
@@ -525,11 +582,8 @@
     }
 	
 	function allStudents(){
-		localStorage.setItem("clicked","allView");
 		$('#lecture>tbody').empty();
-		$('#lecture>thead').empty();
 		var msg2="";
-		var head="";
 		for (var i=0;i<lectureRows.length;i++){
 			var row2=lectureRows[i];
 			msg2+="<tr>";
@@ -540,19 +594,16 @@
 			var lab=row2['LABNO'];
 			msg2+= "<td>" + lab + "</td>";
 			var email=row2['EMAIL'];
-			msg2+="<td>" +email+"</td>";
-			
+			msg2+= "<td>" + email + "</td>";
+			msg2 += '<td id="mass" ><a class=" fa fa-pencil-square-o" type="button" onClick="editLecRoster(\'' + row2['MATNO'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delStudent(\'' + row2['MATNO'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a></td>'
 			msg2+="</tr>";
 			
 		}
-		head+="<tr><th>Matric No</th><th>Name</th><th>Lab Group</th><th>Email</th></tr>";
-		$('#lecture>thead:last').append(head);
 		$('#lecture>tbody:last').append(msg2);
 	
 	}
 	
 	function labRoster(){
-		localStorage.setItem("clicked","labView");
 		$('#lab1>tbody').empty();
 		$('#lab2>tbody').empty();
 		$('#lab3>tbody').empty();
@@ -615,7 +666,6 @@
 	}
 	
 	function projectRoster(){
-		localStorage.setItem("clicked","projectView");
 		$('#project1>thead').empty();
 		$('#project2>thead').empty();
 		$('#project3>thead').empty();
@@ -699,7 +749,6 @@
 					msg2+= "<td>" + mat + "</td>";
 					var name=row['NAME'];
 					msg2+= "<td>" + name + "</td>";
-					
 					msg2+="</tr>";
 					msg2+=tmp;
 				}
@@ -724,16 +773,7 @@
 		$('#project3>tbody:last').append(msg3);
 	}
     </script>
-    <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-61832287-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
+    
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -752,14 +792,157 @@
         <h4 class="modal-title" id="myModalLabel">News</h4>
       </div>
       <div class="modal-body">
-        <dt>   Tuesday, 24 March 2015</dt>
-                            <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd>
+       
       </div>
      
     </div>
   </div>
 </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><b>Edit Lesson Plan</b></h4>
+      </div>
+      <div class="modal-body">
+        <!-- <form method="post" action="editLesson.php">
+<p>Edit details<br>
+Week <input type="text" name="week" id="week">  
+Labt <input type="text" name="labt" id="labt"> 
+Lecturet <input type="text" name="lecturet" id="lecturet">
+Labd <input type="text" name="labd" id="labd"> 
+Lectured <input type="text" name="lectured" id="lectured">
+<input type="submit" name="submit" value="Answer">
+</p>
+</form> -->
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><b>Edit Lesson Plan</b></h4>
+      </div>
+      <div class="modal-body">
+        <!-- <form method="post" action="editLesson.php">
+<p>Edit details<br>
+Week <input type="text" name="week" id="week">  
+Labt <input type="text" name="labt" id="labt"> 
+Lecturet <input type="text" name="lecturet" id="lecturet">
+Labd <input type="text" name="labd" id="labd"> 
+Lectured <input type="text" name="lectured" id="lectured">
+<input type="submit" name="submit" value="Answer">
+</p>
+</form> -->
+      </div>
+     
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="editModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><b>Edit Lesson Plan</b></h4>
+      </div>
+      <div class="modal-body">
+        <!-- <form method="post" action="editLesson.php">
+<p>Edit details<br>
+Week <input type="text" name="week" id="week">  
+Labt <input type="text" name="labt" id="labt"> 
+Lecturet <input type="text" name="lecturet" id="lecturet">
+Labd <input type="text" name="labd" id="labd"> 
+Lectured <input type="text" name="lectured" id="lectured">
+<input type="submit" name="submit" value="Answer">
+</p>
+</form> -->
+      </div>
+     
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="editModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><b>Edit Student Details</b></h4>
+      </div>
+      <div class="modal-body">
+        <!-- <form method="post" action="editLesson.php">
+<p>Edit details<br>
+Week <input type="text" name="week" id="week">  
+Labt <input type="text" name="labt" id="labt"> 
+Lecturet <input type="text" name="lecturet" id="lecturet">
+Labd <input type="text" name="labd" id="labd"> 
+Lectured <input type="text" name="lectured" id="lectured">
+<input type="submit" name="submit" value="Answer">
+</p>
+</form> -->
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><b>Add New Student</b></h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><b>Upload Class Roster</b></h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+     
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="editModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"><b>News</b></h4>
+      </div>
+      <div class="modal-body">
+         <form method="post" action="editLesson.php">
+<p><b>Edit News</b><br><br>
+
+<input style="width:500px"type="text" name="News" id="News"> <br><br>
+<button  class="btn btn-theme" type="submit" name="submit">Confirm Edit</button>
+
+</p>
+</form> 
+      </div>
+     
+    </div>
+  </div>
+</div>
 
     
     <!-- Fixed navbar -->
@@ -776,11 +959,11 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar">
       <ul class="nav navbar-nav">
-        <li><a id="test1" onclick="ga('send', 'event', 'Intro','click');">Intro</a></li>
-        <li><a id="test2" onclick="ga('send', 'event', 'News','click');">News</a></li>
-        <li><a id="test3" onclick="ga('send', 'event', 'Lesson Plan','click');">Lesson Plan</a></li>
-        <li><a id="test4" onclick="ga('send', 'event', 'Class Roster','click');">Class Roster</a></li>
-        <li><a href="/~suprajas/project/2010">CS2010</a></li>
+        
+        <li><a id="test2">News</a></li>
+        <li><a id="test3">Lesson Plan</a></li>
+        <li><a id="test4">Class Roster</a></li>
+        
         
 
         
@@ -812,45 +995,31 @@
     
  </div>
   
-	<div id="green">
-		<div id="12" class="container">
-			<div class="row">
-				
-				<h2><b>Introduction</b></h2>
-                <hr align="center" width="100%" size="5">
-				<div class="col-lg-15 centered">
-					<p >I (Dr Steven Halim) have the experience of creating a (simple and static) personal website since year 2000 and the highly successful VisuAlgo: algorithm visualization and animation website since 2011. However, I am still learning the latest web development techniques as of year 2014-2015. In Semester 2 (Jan-Apr 2015) of this Academic Year (AY) 2014/15, I am assigned to teach this new module CP3101B - Web Programming and Applications Show the official module description with Steven's improvisation. This revamped "World of Seven" website and in particular this single -- all-in "cp3101b.html" webpage will be the main page of CP3101B*.
+	
 
-                        I started this page on Monday, 30 June 2014 and since then I gradually update this page with the contents of my version of CP3101B. The starting version (of my version) of CP3101B is the one created by Arnold Rosenbloom, a visiting lecturer from University of Toronto, Canada who taught the first edition of CP3101B in NUS in Jan-Apr 2014. Due to different background and expertise, my version will be necessarily different from Arnold's version. If you are a current/prospective CP3101B student in Semester 2 of AY2014/2015, please bookmark this webpage and occassionally check for updates :).</p>
-                   <hr align="center" width="100%" size="5">
-                   
-        			
-        			
-				</div>
-			</div>
-		</div>
-		<div id="Database"></div>
-	</div>
-	
-	
+
     <div id="green1">
         <div id="12" class="container">
             <div class="row">
                 
                 <h2><b>News</b></h3>
+                  <button type='button' class='btn btn-theme glyphicon glyphicon-plus' onclick="addNews()" >&nbspAdd News</button><br><br>
                     <hr align="center" width="100%" size="5">
 
                 <div class="col-lg-15 centered">
 
                    <dl class="dl-horizontal">
-                            <dt>   Tuesday, 24 March 2015</dt>
-                            <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd><br>
+                            <!-- <dt>Tuesday, 24 March 2015</dt>
+                            <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd>
+							<a class=" fa fa-pencil-square-o" type="button" onClick="editNews()" data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a><br><br>
                             <dt>Monday, 23 March 2015</dt>
-                            <dd>Bookmark and visit CP3101B project webpage at least once a week to see your team's health (color coded) and other team's progress too.</dd><br>
+                            <dd>Bookmark and visit CP3101B project webpage at least once a week to see your team's health (color coded) and other team's progress too.</dd>
+							<a class=" fa fa-pencil-square-o" type="button" onClick="editNews()"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Delete" ></a><br><br>
                             <dt>Sunday, 22 March 2015</dt>
                             <dd>The list of milestones and deliverables to get (easy?) 1% on your last 4 lab sessions: Lab8-11 is updated directly at our course project page; These checkpoints will help Steven, Peter, and Yang Shun to keep track of your team's progress.
-                            We will have a lecture about short (~30 minutes) case study of VisuAlgo; The short Lecture Notes will be uploaded on the day itself; A few parts of this short lecture will be examinable.<br>
-                            
+                            We will have a lecture about short (~30 minutes) case study of VisuAlgo; The short Lecture Notes will be uploaded on the day itself; A few parts of this short lecture will be examinable.</dd>
+							<a class=" fa fa-pencil-square-o" type="button" onClick="editNews()"data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')"data-toggle="tooltip" data-placement="bottom" title="Click here to Delete" ></a><br><br> -->
+                          
                         </dl><br>
                     <hr align="center" width="100%" size="5">
                     
@@ -873,12 +1042,12 @@
                                 <h2><b>Lesson Plan</b></h2>
 
                                 <hr align="center" width="100%" size="5"><br>
-                                <ul id="smash" class="nav nav-tabs nav-justified">
-                         <li><a data-toggle="tab" class = "active" href="#dropdown4" onclick="ga('send', 'event', 'All Weeks','click'); return allweeks();"><h4>All weeks</h4></a></li>
-                                    <li><a data-toggle="tab" class = "active" href="#dropdown5" onclick="ga('send', 'event', 'This week','click'); return thisweek();"><h4>This week</h4></a></li>
+                                <ul class="nav nav-tabs nav-justified">
+                         <li><a data-toggle="tab" class = "active" href="#dropdown4"><h4>All weeks</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown5" onclick="return thisweek();"><h4>This week</h4></a></li>
 
-                                    <li><a data-toggle="tab" class = "active" href="#dropdown6 " onclick="ga('send', 'event', 'Future Weeks','click'); return futureweeks();"><h4>Future weeks</h4></a></li>
-                                    <li><a data-toggle="tab" class = "active" href="#dropdown7" onclick="ga('send', 'event', 'Condensed View','click'); return condensed();"><h4>Condensed view</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown6 " onclick="return futureweeks();"><h4>Future weeks</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown7" onclick="return condensed();"><h4>Condensed view</h4></a></li>
                         </ul>
                          <div class="tab-content">
 
@@ -891,6 +1060,13 @@
                                 <div class=""> 
                                     <table  id = "lesson1" class="table table-bordered">
                                         <thead>
+                                            <tr>
+
+                                                <th>Week </th>
+                                                <th>Lab Details</th>
+                                                <th>Lecture Details</th>
+                                                
+                                            </tr>
                                         </thead>
                                         <tbody>
                                             
@@ -898,7 +1074,7 @@
                                     </table>
                                 </div>
                             </div>
-                             <div id="dropdown5" class="tab-pane active">
+                             <div id="dropdown5" class="tab-pane fade">
                                <!-- <h2><b>Lecture Roster</b></h2> -->
 
                                 
@@ -907,6 +1083,13 @@
                                 <div class=""> 
                                     <table  id="lesson2" class="table table-bordered">
                                         <thead>
+                                            <tr>
+
+                                                <th>Week </th>
+                                                <th>Lab Details</th>
+                                                <th>Lecture Details</th>
+                                                
+                                            </tr>
                                         </thead>
                                         <tbody>
                                            
@@ -916,7 +1099,7 @@
                                 </div>
                             </div>
 
-                             <div id="dropdown6" class="tab-pane active">
+                             <div id="dropdown6" class="tab-pane fade">
                                <!-- <h2><b>Lecture Roster</b></h2> -->
 
                                 
@@ -925,6 +1108,13 @@
                                 <div class=""> 
                                     <table  id = "lesson3" class="table table-bordered">
                                         <thead>
+                                            <tr>
+
+                                                <th>Week </th>
+                                                <th>Lab Details</th>
+                                                <th>Lecture Details</th>
+                                                
+                                            </tr>
                                         </thead>
                                         <tbody>
                                             
@@ -932,7 +1122,7 @@
                                     </table>
                                 </div>
                             </div>
-                             <div id="dropdown7" class="tab-pane active">
+                             <div id="dropdown7" class="tab-pane fade">
                                <!-- <h2><b>Lecture Roster</b></h2> -->
 
                                 
@@ -941,7 +1131,13 @@
                                 <div class=""> 
                                     <table  id="lesson4" class="table table-bordered">
                                         <thead>
-                                            
+                                            <tr>
+
+                                                <th>Week </th>
+                                                <th>Lab Details</th>
+                                                <th>Lecture Details</th>
+                                                
+                                            </tr>
                                         </thead>
                                         <tbody>
 
@@ -981,23 +1177,30 @@
   <li role="presentation"><a href="#"><h3>Messages<h3></a></li>
                         </ul> -->
                         <ul class="nav nav-tabs nav-justified">
-                         <li><a data-toggle="tab"  href="#dropdownL" class="active" onclick="ga('send', 'event', 'Lecture Roster','click'); return allStudents();"><h4>Lecture Roster</h4></a></li>
-                                    <li><a data-toggle="tab"  href="#dropdown2" class="active" onclick="ga('send', 'event', 'Lab Roster','click'); return labRoster();"><h4>Lab Roster</h4></a></li>
-                                    <li><a data-toggle="tab"  href="#dropdown3" class="active" onclick="ga('send', 'event', 'Project Roster','click'); return projectRoster();"><h4>Project Roster</h4></a></li>
+                         <li><a data-toggle="tab" class = "active" href="#dropdownL"><h4>Lecture Roster</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown2" onclick="return labRoster();"><h4>Lab Roster</h4></a></li>
+                                    <li><a data-toggle="tab" href="#dropdown3" onclick="return projectRoster();"><h4>Project Roster</h4></a></li>
                         </ul> 
 
                         <div class="tab-content">
-
+                          <button type='button' class='btn btn-theme glyphicon glyphicon-upload' onclick="Upload()">&nbspUpload Roster</button>&nbsp&nbsp&nbsp
+						  <button type='button' class='btn btn-theme glyphicon glyphicon-plus' onclick="addStudent()" >&nbspAdd New Student</button><br><br>
                             <div id="dropdownL" class="tab-pane active">
                                <!-- <h2><b>Lecture Roster</b></h2> -->
-
+                               
                                 
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
                                
                                 <div class=""> 
                                     <table id="lecture" class="table table-bordered" >
                                         <thead>
-                                            
+                                            <tr>
+
+                                                <th>Matric Number </th>
+                                                <th>Name</th>
+                                                <th>Lab group</th>
+                                                <th>Email</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
                                             
@@ -1007,7 +1210,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div id="dropdown3" class="tab-pane active">
+                            <div id="dropdown3" class="tab-pane fade">
                                 <!-- <h2><b>Project roster</b></h2><hr align="center" width="100%" size="5"><br> -->
                             <div class="">
                                 <table id="project1" class="table table-bordered" border="1" style="width: 300px; border-collapse: collapse; float: left; margin-right: 10px; margin-bottom: 10px">
@@ -1033,7 +1236,7 @@
 
                             </div>
                             </div>
-                            <div id="dropdown2" class="tab-pane active">
+                            <div id="dropdown2" class="tab-pane fade">
                                 <!-- <h2><b>Lab Roster</b></h2><hr align="center" width="100%" size="5"><br> -->
                             <div class="">
                                 <table id="lab1" class="table table-bordered" border="1" style="width: 300px; border-collapse: collapse; float: left; margin-right: 10px; margin-bottom: 10px">
@@ -1056,7 +1259,66 @@
 
                             </div>
                         </div>
+<div id="dropdown4" class="tab-pane fade">
+                        <div class=""> 
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
 
+                                                <th>Week </th>
+                                                <th>Lab Details</th>
+                                                <th>Lecture Details</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           <tr deadline="1421121599"> <!--13 Jan 15, 11.59am-->
+  <td>01, 13 Jan</td>
+  <td>N/A yet</td>
+  <td><a href="cp3101b/introduction.html">Lecture1 - Introduction</a> and do <a href="http://cp3101b.comp.nus.edu.sg/~stevenha/profile.html" target="_blank">Profiling</a> (official students only)</td>
+</tr>
+<tr deadline="1421121599"> <!--13 Jan 15, 11.59am-->
+  <td></td>
+  <td>N/A yet</td>
+  <td><a href="cp3101b/http.html">Lecture2 - HTTP</a> </td>
+</tr>
+
+<tr deadline="1421726399"> <!--20 Jan 15, 11.59am-->
+  <td>02, 20 Jan</td>
+  <td><a href="cp3101b/lab0.html"><span title="Compulsory-but-not-graded">Lab0: Ensuring Web Presence*</span></a></td>
+  <td><a href="cp3101b/html5.html">Lecture3 - HTML5</a> followed with <a href="cp3101b/css3.html">Lecture4 - CSS3</a> (short, not Steven's strength yet)
+  </td>
+</tr>
+
+<tr deadline="1422331199"> <!--27 Jan 15, 11.59am-->
+  <td>03, 26+27 Jan</td>
+  <td><a href="cp3101b/lab1.html">Lab1: Not Just Mockup</a></td>
+  <td><a href="cp3101b/css3.html#css-box-model">Lecture4 - CSS3</a> (continued), then <a href="cp3101b/js.html">Lecture5 - JS</a> 
+</tr>
+
+<tr deadline="1422935999"> <!--03 Feb 15, 11.59am-->
+  <td>04, 02+03 Feb</td>
+  <td><a href="cp3101b/lab2.html">Lab2: First Version</a></td>
+  <td><a href="cp3101b/js.html#Recap">Lecture5 - JS</a> (jQuery, HTML5 canvas, and beyond)</a> 
+</tr>
+
+<tr deadline="1423540799"> <!--10 Feb 15, 11.59am-->
+  <td>05, 09+10 Feb</td>
+  <td><a href="cp3101b/lab3.html">Lab3: Requirement Change</a></td>
+  <td><a href="cp3101b/php.html">Lecture6 - PHP</a></td>
+</tr>
+
+<tr deadline="1424145599"> <!--17 Feb 15, 11.59am-->
+  <td>06, 16+17 Feb</td>
+  <td><a href="cp3101b/lab4.html">Lab4: Game Server</a></td>
+  <td><a href="cp3101b/sql.html">Lecture7 - SQL</a> (which ends with PHP integration) 
+  </td>
+</tr>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                              </div>
 
 
                               
@@ -1200,18 +1462,5 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="assets/js/bootstrap.js"></script>
-	
-	<script>
-	if (localStorage.visitcount) // better than HTTP cookies
-			localStorage.visitcount = parseInt(localStorage.visitcount)+1;
-	else
-			localStorage.visitcount = 1;
-				
-	if(localStorage.visitcount > 3)
-		document.getElementById("green").style.display = "none";
-		document.getElementById("hello").style.display = "none";
-			
-	</script>
-	
   </body>
 </html>

@@ -1,1217 +1,2181 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
   <head>
+
     <meta charset="utf-8">
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="description" content="">
+
     <meta name="author" content="">
 
+
+
     <title>CP3101B</title>
-    <link rel="icon" 
-      type="image/png" 
-      href="logo.png">
+
     <link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+
     <!-- Bootstrap core CSS -->
+
     <link href="assets/css/bootstrap.css" rel="stylesheet">
 
+
+
     <!-- Custom styles for this template -->
+
     <link href="assets/css/main.css" rel="stylesheet">
+
     
+
     <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+
     
+
     <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
     <script src="assets/js/chart.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
     <script>
-	
-	
-	
-	
-	
+
     var rows;
 
+
+
         var month = new Array();
+
         var week;
-		
-		month[0] = "Jan";
-		month[1] = "Feb";
-		month[2] = "Mar";
-		month[3] = "Apr";
-		month[4] = "May";
-		month[5] = "Jun";
-		month[6] = "Jul";
-		month[7] = "Aug";
-		month[8] = "Sept";
-		month[9] = "Oct";
-		month[10] = "Nov";
-		month[11] = "Dec";
-		
+
+month[0] = "Jan";
+
+month[1] = "Feb";
+
+month[2] = "Mar";
+
+month[3] = "Apr";
+
+month[4] = "May";
+
+month[5] = "Jun";
+
+month[6] = "Jul";
+
+month[7] = "Aug";
+
+month[8] = "Sept";
+
+month[9] = "Oct";
+
+month[10] = "Nov";
+
+month[11] = "Dec";
+
     $(window).load(function(){
-     
-		$.post("userEnd.php",
-        {
-                cmd: "getweek"
-        },
-        function(data){
-            console.log(data);
-               week = parseInt(data,10);
-        });
-		
+
+       
+
+
+
         $.post("userEnd.php",
+
         {
+
                 cmd: "load"
+
         },
+
         function(data){
+
               var all = JSON.parse(data);
-              
+
+              console.log(all);
+
+
 
                rows = JSON.parse(all['lesson']);
-               if (week==null){
-				week=7;
-			   }
-			   console.log(week);
-               console.log(localStorage.getItem("clickedLesson"));
-			   if(localStorage.getItem("clickedLesson")=="futureView"){
-				
-				futureweeks();
-			}
-			else if(localStorage.getItem("clickedLesson")=="weekView"){
-				
-				thisweek();
-			}
-			else if(localStorage.getItem("clickedLesson")=="condensedView"){
-				
-				condensed();
-			}
-			else{
-			
-				allweeks();
-			}
-			   
-			   
-               allNews = JSON.parse(all['allNews']);
-			   console.log("allnews:");
-               console.log(allNews);
-			   displayAllNews();
-			   
+
+               console.log("lesson:");
+
+               console.log(rows);
+
+               // console.log(rows);
+
+               var message = "";
+
+               allweeks();
+
                newsRows = JSON.parse(all['news']);
-			   console.log("news:");
+
+               console.log("news:");
+
                console.log(newsRows);
-			   newsAlert();
-    
 
-        });
-		
-		$.post("roster.php",
-		{
-			cmd:"load"
-		},
-		function(data){
-			
-			lectureRows=JSON.parse(data);
-			if(localStorage.getItem("clicked")=="labView"){
-				
-				labRoster();
-			}
-			else if(localStorage.getItem("clicked")=="projectView"){
-				
-				projectRoster();
-			}
-			else{
-			
-				allStudents();
-			}
-			
-		});
-    });
-    
-    
-    $(document).ready(function (){
-						
-            $("#test1").click(function (){
-                //$(this).animate(function(){
-                    $('html, body').animate({
-                        scrollTop: $("#Info").offset().top-70
-                    }, 500);
-					$('#green').show();
-                //});
-            });
-            $("#test2").click(function (){
-                //$(this).animate(function(){
-                    $('html, body').animate({
-                        scrollTop: $("#Database").offset().top-70
-                    }, 500);
-					
-                //});
-            });
-            
-            
-            $("#test3").click(function (){
-                //$(this).animate(function(){
-                        
-                            $('html, body').animate({
-                                scrollTop: $("#sec1").offset().top-70
-                            }, 500);
-               
-                });
-                
-            
-            $("#man").click(function (){
-                //$(this).animate(function(){
-                    $('html, body').animate({
-                        scrollTop: $("#Overview").offset().top-70
-                    }, 500);
-                //});
-            });
-            $("#temp1").click(function (){
-                //$(this).animate(function(){
-                    $('html, body').animate({
-                        scrollTop: $("#sec1").offset().top-70
-                    }, 500);
-                //});
-            });
-            $("#test4").click(function (){
-                //$(this).animate(function(){
-                    $('html, body').animate({
-                        scrollTop: $("#sec2").offset().top-70
-                    }, 500);
-                //});
-            });
-			
-			
-            
-        });
-		$(function () {
-			if($(window).width()<500){
-				condensed();
-				$('#smash li:eq(3) a').tab('show');
-			}
-      			
-   			});
-      function futureweeks(){
-	  localStorage.setItem("clickedLesson","futureView");
-	  $('#lesson3>thead').empty();
-      $('#lesson3 > tbody').empty();
-      var msg = "";
-	  var head="";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                var rw = parseInt(row['weekId'],10);
-                if(rw>=week){
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
-                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				  
-											
-					
-                // }
-                msg +="</tr>";
-				
-                // console.log(msg);
-               }
-             }
-			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
-               $('#lesson3 > thead:last').append(head);
-			   $('#lesson3 > tbody:last').append(msg);
-               return true;
+               for(var i =0; i< newsRows.length; i++){
 
-    }
-      function thisweek(){
-	  localStorage.setItem("clickedLesson","weekView");
-	  $('#lesson2>thead').empty();
-      $('#lesson2 > tbody').empty();
-      var msg = "";
-	  var head="";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                var rw = parseInt(row['weekId'],10);
-                if(rw>=week-1 && rw<=week+1){
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
-                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				 
-                // }
-                msg +="</tr>";
-				
-                // console.log(msg);
-               }
-             }
-			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
-               $('#lesson2 > thead:last').append(head);
-			   $('#lesson2 > tbody:last').append(msg);
-
-    }
-    function allweeks(){
-	  localStorage.setItem("clickedLesson","lessonView");
-	  $('#lesson1>thead').empty();
-      $('#lesson1 > tbody').empty();
-      var msg = "";
-	  var head="";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
-                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
-				  
-                // }
-                msg +="</tr>";
-                // console.log(msg);
-               }
-			   head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
-               $('#lesson1 > thead:last').append(head);
-			   $('#lesson1 > tbody:last').append(msg);
-    }
-
-    function condensed(){
-	localStorage.setItem("clickedLesson","condensedView");
-	  $('#lesson4>thead').empty();
-      $('#lesson4 > tbody').empty();
-      var msg = "";
-	  var head="";
-               for(var i=0;i<rows.length;i++){
-                var row = rows[i];
-                var rw = parseInt(row['weekId'],10);
-                if(rw>=week){
-                msg += "<tr>";
-                // for(var j=0;j<row.length;j++){
-                  var d=new Date(row['lectureDate']);
-                  col1 = row['weekId'];
-                  col1 += ", "+ d.getDate();
-                  d=new Date(row['labDate']);
-                  col1+= "+" + d.getDate();
-                  col1 += " "+month[d.getMonth()];
-                  // console.log(col1);
-                  msg += "<td>"+col1+"</td>";
-                  msg += "<td><b>"+row['labTitle']+"</td>";
-                  msg += "<td><b>"+row['lectureTitle']+"</td>";
-				  
-                // }
-                msg +="</tr>";
-                // console.log(msg);
-               }
-             }
-			 head+="<tr><th>Week</th><th>Lab Details</th><th>Lecture Details</th></tr>";
-               $('#lesson4 > thead:last').append(head);
-			   $('#lesson4 > tbody:last').append(msg);
-
-    }
-	
-	
-	function newsAlert(){
-	
-		var message = "";
-		for(var i =0; i< newsRows.length; i++){
 				   var row = newsRows[i];
+
 				   var dateformat =  row['newsDate'];
+
 				   var date = dateformat.substring(0,11);
+
 				   var month = dateformat.substring(5,7);
+
 				   var year = dateformat.substring(0,4);
+
 				   var dd = dateformat.substring(8,10);
+
 				   var monthString = "";
+
 				   var dayString = "";
+
 				   var day = new Date(parseInt(year), parseInt(month,10)-1, parseInt(dd,10));
+
 				   
+
 				   var dayNumber = day.getDay();
+
 				   switch(dayNumber){
+
 					case 0: 
+
 						dayString = "Sunday, ";
+
 						break;
+
 					case 1: 
+
 						dayString = "Monday, ";
+
 						break;
+
 					case 2: 
+
 						dayString = "Tuesday, ";
+
 						break;
+
 					case 3: 
+
 						dayString = "Wednesday, ";
+
 						break;
+
 					case 4: 
+
 						dayString = "Thursday, ";
+
 						break;
+
 					case 5: 
+
 						dayString = "Friday, ";
+
 						break;
+
 					case 6: 
+
 						dayString = "Saturday, ";
+
 						break;
+
 					default:
+
 						dyaString = "Monday, ";
+
 								   
+
 				   }
+
 				   
+
 				   
+
 				   switch(parseInt(month,10)){
+
 					case 1: 
+
 						monthString = " January ";
+
 						break;
+
 					case 2: 
+
 						monthString = " February ";
+
 						break;
+
 					case 3: 
+
 						monthString = " March ";
+
 						break;
+
 					case 4: 
+
 						monthString = " April ";
+
 						break;
+
 					case 5: 
+
 						monthString = " May ";
+
 						break;
+
 					case 6: 
+
 						monthString = " June ";
+
 						break;
+
 					case 7: 
+
 						monthString = " July ";
+
 						break;
+
 					case 8: 
+
 						monthString = " August ";
+
 						break;
+
 					case 9: 
+
 						monthString = " September ";
+
 						break;
+
 					case 10: 
+
 						monthString = " October ";
+
 						break;
+
 					case 11: 
+
 						monthString = " November ";
+
 						break;
+
 					case 12: 
+
 						monthString = " December ";
+
 						break;
+
 					default:
+
 						monthString = month;
+
 								   
+
 				   }
+
 						   
-					message = message + "<p> <b>" + dayString + dd + monthString + year + "</b> <br>";
+
+					message =  message + "<p> <b>" + dayString + dd + monthString + year + "</b> <br>";
+
 					message = message + row['content'] + "</p>";
 					
-					//newsdisplay += "<a class=" fa fa-pencil-square-o" type="button" onClick="editNews()" data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delClick(\'' + row['weekId'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a><br><br>"
+					
+
 			   
+
          
+
         }
-        
+
+        console.log(message);
+
         $('.modal-body').html(message);
 		$('#myModal').modal('show');
-				
-	}
-	
-	
-	 function displayAllNews(){
-	 
+
+
+
+        });
+
+        $.post("userEnd.php",
+
+        {
+
+                cmd: "getweek"
+
+        },
+
+        function(data){
+
+            console.log(data);
+
+               week = parseInt(data,10);
+
+        });
+
 		
-		var newsdisplay = "";
-		for(var i =0; i< allNews.length; i++){
-				   var row = allNews[i];
-				   var dateformat =  row['newsDate'];
-				   var date = dateformat.substring(0,11);
-				   var month = dateformat.substring(5,7);
-				   var year = dateformat.substring(0,4);
-				   var dd = dateformat.substring(8,10);
-				   var monthString = "";
-				   var dayString = "";
-				   var day = new Date(parseInt(year), parseInt(month,10)-1, parseInt(dd,10));
-				   
-				   var dayNumber = day.getDay();
-				   switch(dayNumber){
-					case 0: 
-						dayString = "Sunday, ";
-						break;
-					case 1: 
-						dayString = "Monday, ";
-						break;
-					case 2: 
-						dayString = "Tuesday, ";
-						break;
-					case 3: 
-						dayString = "Wednesday, ";
-						break;
-					case 4: 
-						dayString = "Thursday, ";
-						break;
-					case 5: 
-						dayString = "Friday, ";
-						break;
-					case 6: 
-						dayString = "Saturday, ";
-						break;
-					default:
-						dyaString = "Monday, ";
-								   
-				   }
-				   
-				   
-				   switch(parseInt(month,10)){
-					case 1: 
-						monthString = " January ";
-						break;
-					case 2: 
-						monthString = " February ";
-						break;
-					case 3: 
-						monthString = " March ";
-						break;
-					case 4: 
-						monthString = " April ";
-						break;
-					case 5: 
-						monthString = " May ";
-						break;
-					case 6: 
-						monthString = " June ";
-						break;
-					case 7: 
-						monthString = " July ";
-						break;
-					case 8: 
-						monthString = " August ";
-						break;
-					case 9: 
-						monthString = " September ";
-						break;
-					case 10: 
-						monthString = " October ";
-						break;
-					case 11: 
-						monthString = " November ";
-						break;
-					case 12: 
-						monthString = " December ";
-						break;
-					default:
-						monthString = month;
-								   
-				   }						   
+
+		$.post("roster.php",
+
+		{
+
+			cmd:"load"
+
+		},
+
+		function(data){
+
+			console.log(data);
+
+			lectureRows=JSON.parse(data);
+
+			allStudents();
+
+			
+
+		});
+
+    });
+
+    
+
+    
+
+    $(document).ready(function (){
+
+            $("#test1").click(function (){
+
+                //$(this).animate(function(){
+
+                    $('html, body').animate({
+
+                        scrollTop: $("#Info").offset().top-70
+
+                    }, 500);
+
+                //});
+
+            });
+
+            $("#test2").click(function (){
+
+                //$(this).animate(function(){
+
+                    $('html, body').animate({
+
+                        scrollTop: $("#Database").offset().top-70
+
+                    }, 500);
+
+                //});
+
+            });
+
+            
+
+            
+
+            $("#test3").click(function (){
+
+                //$(this).animate(function(){
+
+                        
+
+                            $('html, body').animate({
+
+                                scrollTop: $("#sec1").offset().top-70
+
+                            }, 500);
+
+               
+
+                });
+
+                
+
+            
+
+            $("#man").click(function (){
+
+                //$(this).animate(function(){
+
+                    $('html, body').animate({
+
+                        scrollTop: $("#Overview").offset().top-70
+
+                    }, 500);
+
+                //});
+
+            });
+
+            $("#temp1").click(function (){
+
+                //$(this).animate(function(){
+
+                    $('html, body').animate({
+
+                        scrollTop: $("#sec1").offset().top-70
+
+                    }, 500);
+
+                //});
+
+            });
+
+            $("#test4").click(function (){
+
+                //$(this).animate(function(){
+
+                    $('html, body').animate({
+
+                        scrollTop: $("#sec2").offset().top-70
+
+                    }, 500);
+
+                //});
+
+            });
+
+            
+
+        });
+
+
+
+      function futureweeks(){
+
+      $('#lesson3 > tbody').empty();
+
+      var msg = "";
+
+               for(var i=0;i<rows.length;i++){
+
+                var row = rows[i];
+
+                var rw = parseInt(row['weekId'],10);
+
+                if(rw>=week){
+
+                msg += "<tr>";
+
+                // for(var j=0;j<row.length;j++){
+
+                  var d=new Date(row['lectureDate']);
+
+                  col1 = row['weekId'];
+
+                  col1 += ", "+ d.getDate();
+
+                  d=new Date(row['labDate']);
+
+                  col1+= "+" + d.getDate();
+
+                  col1 += " "+month[d.getMonth()];
+
+                  // console.log(col1);
+
+                  msg += "<td>"+col1+"</td>";
+
+                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
+
+                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
+											;
+
+					
+
+                // }
+
+                msg +="</tr>";
+
 				
-					newsdisplay += "<dt>" + dayString + dd + monthString + year + "</dt>";
-					newsdisplay += "<dd>" + row['content'] + "</dd><br>";
-					//newsdisplay += '<a class=" fa fa-pencil-square-o" type="button" onClick="editNews(\'' + row['content'] + '\', \'' + row['newsDate'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Edit"> </a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <a  class="fa fa-trash-o" type="button" onClick="delNews(\'' + row['newsDate'] + '\')" data-toggle="tooltip" data-placement="bottom" title="Click here to Delete"></a><br><br>'
-					//newsdisplay += "</dd>"
-         
-        }
-        
-        //$('.modal-body').html(newsdisplay);
-		console.log(newsdisplay);
-		$('.dl-horizontal').html(newsdisplay);
-		
+
+                // console.log(msg);
+
+               }
+
+             }
+
+               $('#lesson3 > tbody:last').append(msg);
+
+               return true;
+
+
 
     }
+
+      function thisweek(){
+
+      $('#lesson2 > tbody').empty();
+
+      var msg = "";
+
+               for(var i=0;i<rows.length;i++){
+
+                var row = rows[i];
+
+                var rw = parseInt(row['weekId'],10);
+
+                if(rw>=week-1 && rw<=week+1){
+
+                msg += "<tr>";
+
+                // for(var j=0;j<row.length;j++){
+
+                  var d=new Date(row['lectureDate']);
+
+                  col1 = row['weekId'];
+
+                  col1 += ", "+ d.getDate();
+
+                  d=new Date(row['labDate']);
+
+                  col1+= "+" + d.getDate();
+
+                  col1 += " "+month[d.getMonth()];
+
+                  // console.log(col1);
+
+                  msg += "<td>"+col1+"</td>";
+
+                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
+
+                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
+                // }
+
+                msg +="</tr>";
+
+				
+
+                // console.log(msg);
+
+               }
+
+             }
+
+               $('#lesson2 > tbody:last').append(msg);
+
+
+
+    }
+
+    function allweeks(){
+
+      $('#lesson1 > tbody').empty();
+
+      var msg = "";
+
+               for(var i=0;i<rows.length;i++){
+
+                var row = rows[i];
+
+                msg += "<tr>";
+
+                // for(var j=0;j<row.length;j++){
+
+                  var d=new Date(row['lectureDate']);
+
+                  col1 = row['weekId'];
+
+                  col1 += ", "+ d.getDate();
+
+                  d=new Date(row['labDate']);
+
+                  col1+= "+" + d.getDate();
+
+                  col1 += " "+month[d.getMonth()];
+
+                  // console.log(col1);
+
+                  msg += "<td>"+col1+"</td>";
+
+                  msg += "<td><b>"+row['labTitle']+"</b> "+row['labDetails']+"</td>";
+
+                  msg += "<td><b>"+row['lectureTitle']+"</b> "+row['lectureDetails']+"</td>";
+
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
+                // }
+
+                msg +="</tr>";
+
+                // console.log(msg);
+
+               }
+
+               $('#lesson1 > tbody:last').append(msg);
+
+    }
+
+
+
+    function condensed(){
+
+      $('#lesson4 > tbody').empty();
+
+      var msg = "";
+
+               for(var i=0;i<rows.length;i++){
+
+                var row = rows[i];
+
+                var rw = parseInt(row['weekId'],10);
+
+                if(rw>=week){
+
+                msg += "<tr>";
+
+                // for(var j=0;j<row.length;j++){
+
+                  var d=new Date(row['lectureDate']);
+
+                  col1 = row['weekId'];
+
+                  col1 += ", "+ d.getDate();
+
+                  d=new Date(row['labDate']);
+
+                  col1+= "+" + d.getDate();
+
+                  col1 += " "+month[d.getMonth()];
+
+                  // console.log(col1);
+
+                  msg += "<td>"+col1+"</td>";
+
+                  msg += "<td><b>"+row['labTitle']+"</td>";
+
+                  msg += "<td><b>"+row['lectureTitle']+"</td>";
+
+				  msg+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
+                // }
+
+                msg +="</tr>";
+
+                // console.log(msg);
+
+               }
+
+             }
+
+               $('#lesson4 > tbody:last').append(msg);
+
+
+
+    }
+
 	
+
 	function allStudents(){
-		localStorage.setItem("clicked","allView");
+
 		$('#lecture>tbody').empty();
-		$('#lecture>thead').empty();
+
 		var msg2="";
-		var head="";
+
 		for (var i=0;i<lectureRows.length;i++){
+
 			var row2=lectureRows[i];
+
 			msg2+="<tr>";
+
 			var mat=row2['MATNO'];
+
 			msg2+= "<td>" + mat + "</td>";
+
 			var name=row2['NAME'];
+
 			msg2+= "<td>" + name + "</td>";
+
 			var lab=row2['LABNO'];
+
 			msg2+= "<td>" + lab + "</td>";
+
 			var email=row2['EMAIL'];
-			msg2+="<td>" +email+"</td>";
-			
+
+			msg2+="<td>" + email + "</td>";
+
+			msg2+="<td><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button>&nbsp&nbsp&nbsp<button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
 			msg2+="</tr>";
+
 			
+
 		}
-		head+="<tr><th>Matric No</th><th>Name</th><th>Lab Group</th><th>Email</th></tr>";
-		$('#lecture>thead:last').append(head);
+
 		$('#lecture>tbody:last').append(msg2);
+
 	
+
 	}
+
 	
+
 	function labRoster(){
-		localStorage.setItem("clicked","labView");
+
 		$('#lab1>tbody').empty();
+
 		$('#lab2>tbody').empty();
+
 		$('#lab3>tbody').empty();
+
 		$('#lab1>thead').empty();
+
 		$('#lab2>thead').empty();
+
 		$('#lab3>thead').empty();
+
 		var msg="";
+
 		var msg2="";
+
 		var msg3="";
+
 		var head1="";
+
 		var head2="";
+
 		var head3="";
+
 		var class1=0;
+
 		var class2=0;
+
 		var class3=0;
+
 		for (var i=0;i<lectureRows.length;i++){
+
 			var row=lectureRows[i];
+
 			var rw=parseInt(row['LABNO'],10);
+
 			if (rw==1){
+
 				msg+="<tr>";
+
 				var mat=row['MATNO'];
+
 				msg+= "<td>" + mat + "</td>";
+
 				var name=row['NAME'];
+
 				msg+= "<td>" + name + "</td>";
-				
+
+				msg+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
 				msg+="</tr>";
+
 				class1+=1;
+
 			}
+
 			if (rw==2){
+
 				msg2+="<tr>";
+
 				var mat=row['MATNO'];
+
 				msg2+= "<td>" + mat + "</td>";
+
 				var name=row['NAME'];
+
 				msg2+= "<td>" + name + "</td>";
-				
+
+				msg2+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
 				msg2+="</tr>";
+
 				class2+=1;
+
 			}
+
 			if (rw==3){
+
 				msg3+="<tr>";
+
 				var mat=row['MATNO'];
+
 				msg3+= "<td>" + mat + "</td>";
+
 				var name=row['NAME'];
+
 				msg3+= "<td>" + name + "</td>";
-				
+
+				msg3+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
 				msg3+="</tr>";
+
 				class3+=1;
+
 			}
+
 		
+
 		}
-		head1+="<tr><th>Matric No</th><th>LG1: <a href='http://cp3101b.comp.nus.edu.sg/~stevenha' target='_blank'>Steven Halim</a><br>(Lecturer, "+class1+"/20)</th></tr>";
-		head2+="<tr><th>Matric No</th><th>LG2: <a href='http://cp3101b.comp.nus.edu.sg/~peter' target='_blank'>Peter Phandi</a><br>(Lab TA, "+class2+"/20)</th></tr>";
-		head3+="<tr><th>Matric No</th><th>LG3: <a href='http://cp3101b.comp.nus.edu.sg/~yangshun' target='_blank'>Tay Yang Shun</a><br>(Lab TA, "+class3+"/20</font>)</th></tr>"
+
+		head1+="<tr><th>Matric No</th><th>LG1:Steven Halim<br>(Lecturer, "+class1+"/20)</th></tr>";
+
+		head2+="<tr><th>Matric No</th><th>LG2:Bharath Parameswaran<br>(Lab TA, "+class2+"/20)</th></tr>";
+
+		head3+="<tr><th>Matric No</th><th>LG3:Le Beier<br>(Lab TA, "+class3+"/20</font>)</th></tr>"
+
 		$('#lab1>thead:last').append(head1);
+
 		$('#lab2>thead:last').append(head2);
+
 		$('#lab3>thead:last').append(head3);
+
 		$('#lab1>tbody:last').append(msg);
+
 		$('#lab2>tbody:last').append(msg2);
+
 		$('#lab3>tbody:last').append(msg3);
+
 	}
+
 	
+
 	function projectRoster(){
-		localStorage.setItem("clicked","projectView");
+
 		$('#project1>thead').empty();
+
 		$('#project2>thead').empty();
+
 		$('#project3>thead').empty();
+
 		$('#project1>tbody').empty();
+
 		$('#project2>tbody').empty();
+
 		$('#project3>tbody').empty();
+
 		var head1="";
+
 		var head2="";
+
 		var head3="";
+
 		var msg="";
+
 		var msg1="";
+
 		var msg2="";
+
 		var msg3="";
+
 		var tmp="";
+
 		var visited=[];
+
 		ctr1=0;
+
 		class1=0;
+
 		class2=0;
+
 		class3=0;
+
 		for (var i=0;i<lectureRows.length;i++){
+
 			visited[i]=0;
+
 			var record=lectureRows[i];
+
 			var lab=parseInt(record['LABNO'],10);
+
 			if (lab==1){
+
 				class1+=1;
+
 			}
+
 			if (lab==2){
+
 				class2+=1;
+
 			}
+
 			if (lab==3){
+
 				class3+=1;
+
 			}
+
 		}
-		head1+="<tr><th width='50px'>Team</th><th>Matric No</th><th>LG1: <a href='http://cp3101b.comp.nus.edu.sg/~stevenha' target='_blank'>Steven Halim</a><br>(Lecturer, "+class1+"/20)</th></tr>";
-		head2+="<tr><th width='50px'>Team</th><th>Matric No</th><th>LG2: <a href='http://cp3101b.comp.nus.edu.sg/~peter' target='_blank'>Peter Phandi</a><br>(Lab TA, "+class2+"/20)</th></tr>";
-		head3+="<tr><th width='50px'>Team</th><th>Matric No</th><th>LG3: <a href='http://cp3101b.comp.nus.edu.sg/~yangshun' target='_blank'>Tay Yang Shun</a><br>(Lab TA, "+class3+"/20</font>)</th></tr>"
+
+		head1+="<tr><th width='50px'>Team</th><th>Matric No</th><th>LG1:Steven Halim<br>(Lecturer, "+class1+"/20)</th></tr>";
+
+		head2+="<tr><th width='50px'>Team</th><th>Matric No</th><th>LG2:Ket Fah<br>(Lab TA, "+class2+"/20)</th></tr>";
+
+		head3+="<tr><th width='50px'>Team</th><th>Matric No</th><th>LG3:Huang Da<br>(Lab TA, "+class3+"/20</font>)</th></tr>"
+
 		
+
 		for (var i=0;i<lectureRows.length;i++){
+
 			tmp="";
+
 			ctr1=1;
+
 			
+
 			if (visited[i]==0){
+
 				var row=lectureRows[i];
+
 				var rw=parseInt(row['PRONO'],10);
+
 				var labNo=parseInt(row['LABNO'],10);
+
 				visited[i]=1;
+
 				for (var j=i+1;j<lectureRows.length;j++){
+
 					if (visited[j]==0){
+
 						var row2=lectureRows[j];
+
 						var rw2=parseInt(row2['PRONO'],10);
+
 						var labNo2=parseInt(row2['LABNO'],10);
+
 						if (rw2==rw && labNo==labNo2){
+
 							ctr1+=1;
+
 							tmp+="<tr>";
+
 							var mat=row2['MATNO'];
+
 							tmp+= "<td>" + mat + "</td>";
+
 							var name=row2['NAME'];
+
 							tmp+= "<td>" + name + "</td>";
+
 							tmp+="</tr>";
+
 							visited[j]=1;
+
 						}
+
 						else{
+
 							visited[j]=0;
+
 						}
+
 					}
+
 				}
+
 				if (labNo==1){
+
 					msg1+="<tr><td rowspan="+ctr1+">"+rw+"</td>";
+
 					var mat=row['MATNO'];
+
 					msg1+= "<td>" + mat + "</td>";
+
 					var name=row['NAME'];
+
 					msg1+= "<td>" + name + "</td>";
-					
+
+					msg1+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
 					msg1+="</tr>";
+
 					msg1+=tmp;
+
 				}
+
+
 
 				if (labNo==2){
+
 					msg2+="<tr><td rowspan="+ctr1+">"+rw+"</td>";
+
 					var mat=row['MATNO'];
+
 					msg2+= "<td>" + mat + "</td>";
+
 					var name=row['NAME'];
+
 					msg2+= "<td>" + name + "</td>";
-					
+
+					msg2+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
 					msg2+="</tr>";
+
 					msg2+=tmp;
+
 				}
+
 				if (labNo==3){
+
 					msg3+="<tr><td rowspan="+ctr1+">"+rw+"</td>";
+
 					var mat=row['MATNO'];
+
 					msg3+= "<td>" + mat + "</td>";
+
 					var name=row['NAME'];
+
 					msg3+= "<td>" + name + "</td>";
-					
+
+					msg3+="<td class='edit'><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Edit</button><br><br><button type='button' class='btn btn-theme' onclick='toggleTrace()'>Delete</button></td>";
+
 					msg3+="</tr>";
+
 					msg3+=tmp;
+
 				}
+
 				 
+
 			}
+
 		}
+
 		$('#project1>thead:last').append(head1);
+
 		$('#project2>thead:last').append(head2);
+
 		$('#project3>thead:last').append(head3);
+
 		$('#project1>tbody:last').append(msg1);
+
 		$('#project2>tbody:last').append(msg2);
+
 		$('#project3>tbody:last').append(msg3);
+
 	}
+
     </script>
-    <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-61832287-1', 'auto');
-  ga('send', 'pageview');
+    
 
-</script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
     <!--[if lt IE 9]>
+
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
     <![endif]-->
+
   </head>
+
+
 
   <body>
 
 
+
+
+
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
   <div class="modal-dialog">
+
     <div class="modal-content">
+
       <div class="modal-header">
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
         <h4 class="modal-title" id="myModalLabel">News</h4>
+
       </div>
+
       <div class="modal-body">
-        <dt>   Tuesday, 24 March 2015</dt>
-                            <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd>
+
+        
+
       </div>
+
      
+
     </div>
+
   </div>
+
 </div>
 
 
+
+
+
     
+
     <!-- Fixed navbar -->
+
     <div class="navbar navbar-default navbar-fixed-top">
+
       <div class="container">
+
         <div class="navbar-header">
+
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+
             <span class="icon-bar"></span>
+
             <span class="icon-bar"></span>
+
             <span class="icon-bar"></span>
+
           </button>
 
+
+
           <a class="navbar-brand" id="man"><img src="logo.png" height ="70px" width="50px" align="left"></a>
+
         </div>
+
         <div class="navbar-collapse collapse" id="navbar">
+
       <ul class="nav navbar-nav">
-        <li><a id="test1" onclick="ga('send', 'event', 'Intro','click');">Intro</a></li>
-        <li><a id="test2" onclick="ga('send', 'event', 'News','click');">News</a></li>
-        <li><a id="test3" onclick="ga('send', 'event', 'Lesson Plan','click');">Lesson Plan</a></li>
-        <li><a id="test4" onclick="ga('send', 'event', 'Class Roster','click');">Class Roster</a></li>
-        <li><a href="/~suprajas/project/2010">CS2010</a></li>
+
+        <li><a id="test1">Intro</a></li>
+
+        <li><a id="test2">News</a></li>
+
+        <li><a id="test3">Lesson Plan</a></li>
+
+        <li><a id="test4">Class Roster</a></li>
+
+        <li><a href="/~suprajas/project/">CP3101B</a></li>
+
+        
+
+
+
         
 
         
+
         
+
         
-        
+
       </ul>
+
       
 
+
+
     </div><!--/.nav-collapse -->
+
    </div>
+
   </div>
 
-  <section id="Overview"></section>
-	
-	    <div id="hello" class="container">
-	    	
-	    	<div class="row">
-	    		<div class="col-lg-8 col-lg-offset-2 centered">
-	    			<h1 class ="text-center">CP3101B</h1>
-                    <h2 class ="text-center">Web Programming and Applications</h2>
-                        
-	    		</div><!-- /col-lg-8 -->
-	    	</div>
-	    	<!-- /row -->
-	    </div> <!-- /container --><br><br>
-	<!-- /hello -->
-   <div id="Info">
-    
- </div>
-  
-	<div id="green">
-		<div id="12" class="container">
-			<div class="row">
-				
-				<h2><b>Introduction</b></h2>
-                <hr align="center" width="100%" size="5">
-				<div class="col-lg-15 centered">
-					<p >I (Dr Steven Halim) have the experience of creating a (simple and static) personal website since year 2000 and the highly successful VisuAlgo: algorithm visualization and animation website since 2011. However, I am still learning the latest web development techniques as of year 2014-2015. In Semester 2 (Jan-Apr 2015) of this Academic Year (AY) 2014/15, I am assigned to teach this new module CP3101B - Web Programming and Applications Show the official module description with Steven's improvisation. This revamped "World of Seven" website and in particular this single -- all-in "cp3101b.html" webpage will be the main page of CP3101B*.
 
-                        I started this page on Monday, 30 June 2014 and since then I gradually update this page with the contents of my version of CP3101B. The starting version (of my version) of CP3101B is the one created by Arnold Rosenbloom, a visiting lecturer from University of Toronto, Canada who taught the first edition of CP3101B in NUS in Jan-Apr 2014. Due to different background and expertise, my version will be necessarily different from Arnold's version. If you are a current/prospective CP3101B student in Semester 2 of AY2014/2015, please bookmark this webpage and occassionally check for updates :).</p>
+
+  <section id="Overview"></section>
+
+	
+
+	    <div id="hello" class="container">
+
+	    	
+
+	    	<div class="row">
+
+	    		<div class="col-lg-8 col-lg-offset-2 centered">
+
+	    			<h1 class ="text-center">CS2010</h1>
+
+                    <h2 class ="text-center">Data Structures and Algorithms II</h2>
+
+                        
+
+	    		</div><!-- /col-lg-8 -->
+
+	    	</div>
+
+	    	<!-- /row -->
+
+	    </div> <!-- /container --><br><br>
+
+	<!-- /hello -->
+
+   <div id="Info">
+
+    
+
+ </div>
+
+  
+
+	<div id="green">
+
+		<div id="12" class="container">
+
+			<div class="row">
+
+				
+
+				<h2><b>Introduction</b></h2>
+
+                <hr align="center" width="100%" size="5">
+
+				<div class="col-lg-15 centered">
+
+					<p >Welcome to to this exciting course about data structures and algorithms that should enhance what you have learned previously in CS1010 (or CS1101S) and CS1020 :). An add on for this module is that you will learn about babies :O. The module will focus on the basic data structures and algorithms that lie at the core of computer science, and how they can be used to improve performance in real-world problems. Throughout the module, we will discuss how to model problems in different ways, and how differing strategies can yield very different performance characteristics. We will both analyze algorithms to better understand their asymptotic performance, and implement them in Java to understand the issues that arise in practice. The goal of this module is both to help you learn how to how to choose and use better data structures and algorithms.</p>
+
                    <hr align="center" width="100%" size="5">
+
                    
+
         			
+
         			
+
 				</div>
+
 			</div>
+
 		</div>
+
 		<div id="Database"></div>
+
 	</div>
-	
-	
+
+
+
+
+
     <div id="green1">
+
         <div id="12" class="container">
+
             <div class="row">
+
                 
+
                 <h2><b>News</b></h3>
+
                     <hr align="center" width="100%" size="5">
+
+
 
                 <div class="col-lg-15 centered">
 
+
+
                    <dl class="dl-horizontal">
+
                             <dt>   Tuesday, 24 March 2015</dt>
+
                             <dd>Short lecture note on VisuAlgo is available; Domain Names, a bit of Search Engine Optimization, and Google Analytics are examinable.</dd><br>
+
                             <dt>Monday, 23 March 2015</dt>
+
                             <dd>Bookmark and visit CP3101B project webpage at least once a week to see your team's health (color coded) and other team's progress too.</dd><br>
+
                             <dt>Sunday, 22 March 2015</dt>
+
                             <dd>The list of milestones and deliverables to get (easy?) 1% on your last 4 lab sessions: Lab8-11 is updated directly at our course project page; These checkpoints will help Steven, Peter, and Yang Shun to keep track of your team's progress.
+
                             We will have a lecture about short (~30 minutes) case study of VisuAlgo; The short Lecture Notes will be uploaded on the day itself; A few parts of this short lecture will be examinable.<br>
+
                             
+
                         </dl><br>
+
                     <hr align="center" width="100%" size="5">
+
                     
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
+
 
       
 
+
+
 	
+
 	
+
               
+
                 
+
                         
+
                         <div id="sec1" ><p></p></div>
+
                         
+
                         <div class="container">
+
                             <div id="dropdown1" class="tab-pane active">
+
                                 <h2><b>Lesson Plan</b></h2>
 
-                                <hr align="center" width="100%" size="5"><br>
-                                <ul id="smash" class="nav nav-tabs nav-justified">
-                         <li><a data-toggle="tab" class = "active" href="#dropdown4" onclick="ga('send', 'event', 'All Weeks','click'); return allweeks();"><h4>All weeks</h4></a></li>
-                                    <li><a data-toggle="tab" class = "active" href="#dropdown5" onclick="ga('send', 'event', 'This week','click'); return thisweek();"><h4>This week</h4></a></li>
 
-                                    <li><a data-toggle="tab" class = "active" href="#dropdown6 " onclick="ga('send', 'event', 'Future Weeks','click'); return futureweeks();"><h4>Future weeks</h4></a></li>
-                                    <li><a data-toggle="tab" class = "active" href="#dropdown7" onclick="ga('send', 'event', 'Condensed View','click'); return condensed();"><h4>Condensed view</h4></a></li>
+
+                                <hr align="center" width="100%" size="5"><br>
+
+                                <ul class="nav nav-tabs nav-justified">
+
+                         <li><a data-toggle="tab" class = "active" href="#dropdown4"><h4>All weeks</h4></a></li>
+
+                                    <li><a data-toggle="tab" href="#dropdown5" onclick="return thisweek();"><h4>This week</h4></a></li>
+
+
+
+                                    <li><a data-toggle="tab" href="#dropdown6 " onclick="return futureweeks();"><h4>Future weeks</h4></a></li>
+
+                                    <li><a data-toggle="tab" href="#dropdown7" onclick="return condensed();"><h4>Condensed view</h4></a></li>
+
                         </ul>
+
                          <div class="tab-content">
 
+
+
                             <div id="dropdown4" class="tab-pane active">
+
                                <!-- <h2><b>Lecture Roster</b></h2> -->
 
+
+
                                 
+
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
+
                                
+
                                 <div class=""> 
+
                                     <table  id = "lesson1" class="table table-bordered">
+
                                         <thead>
+
+                                            <tr>
+
+
+
+                                                <th>Week </th>
+
+                                                <th>Lab Details</th>
+
+                                                <th>Lecture Details</th>
+
+                                                
+
+                                            </tr>
+
                                         </thead>
+
                                         <tbody>
+
                                             
+
                                         </tbody>
+
                                     </table>
+
                                 </div>
+
                             </div>
-                             <div id="dropdown5" class="tab-pane active">
+
+                             <div id="dropdown5" class="tab-pane fade">
+
                                <!-- <h2><b>Lecture Roster</b></h2> -->
 
+
+
                                 
+
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
+
                                
+
                                 <div class=""> 
+
                                     <table  id="lesson2" class="table table-bordered">
+
                                         <thead>
+
+                                            <tr>
+
+
+
+                                                <th>Week </th>
+
+                                                <th>Lab Details</th>
+
+                                                <th>Lecture Details</th>
+
+                                                
+
+                                            </tr>
+
                                         </thead>
+
                                         <tbody>
+
                                            
+
                                             
+
                                         </tbody>
+
                                     </table>
+
                                 </div>
+
                             </div>
 
-                             <div id="dropdown6" class="tab-pane active">
+
+
+                             <div id="dropdown6" class="tab-pane fade">
+
                                <!-- <h2><b>Lecture Roster</b></h2> -->
 
+
+
                                 
+
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
+
                                
+
                                 <div class=""> 
+
                                     <table  id = "lesson3" class="table table-bordered">
+
                                         <thead>
+
+                                            <tr>
+
+
+
+                                                <th>Week </th>
+
+                                                <th>Lab Details</th>
+
+                                                <th>Lecture Details</th>
+
+                                                
+
+                                            </tr>
+
                                         </thead>
+
                                         <tbody>
+
                                             
+
                                         </tbody>
+
                                     </table>
+
                                 </div>
+
                             </div>
-                             <div id="dropdown7" class="tab-pane active">
+
+                             <div id="dropdown7" class="tab-pane fade">
+
                                <!-- <h2><b>Lecture Roster</b></h2> -->
 
+
+
                                 
+
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
+
                                
+
                                 <div class=""> 
+
                                     <table  id="lesson4" class="table table-bordered">
+
                                         <thead>
-                                            
+
+                                            <tr>
+
+
+
+                                                <th>Week </th>
+
+                                                <th>Lab Details</th>
+
+                                                <th>Lecture Details</th>
+
+                                                
+
+                                            </tr>
+
                                         </thead>
+
                                         <tbody>
 
 
+
+
+
                                             
+
                                         </tbody>
+
                                     </table>
+
                                 </div>
+
                             </div>
+
                           </div>
+
                         
+
                         
 
 
 
+
+
+
+
                         
+
                         <div id="sec2" ><p></p></div>
+
                         <h2><b>Class Roster</b></h2>
+
                                 <hr align="center" width="100%" size="5"><br>
+
                      <!--    <ul class="nav nav-tabs nav-justified">
+
                             
+
                             <li class="dropdown">
+
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#"><h2><b>Class Roster</b></h2><b class="caret"></b></a>
+
                                 <ul class="dropdown-menu">
+
                                     <li><a data-toggle="tab" href="#dropdownL">Lecture Roster</a></li>
+
                                     <li><a data-toggle="tab" href="#dropdown2">Lab Roster</a></li>
+
                                     <li><a data-toggle="tab" href="#dropdown3">Project Roster</a></li>
+
                                     
+
                                 </ul>
+
                             </li>
+
                             
+
                         </ul> -->
+
+
 
                        <!--  <ul class="nav nav-tabs nav-justified">
+
                           <li role="presentation" class="active"><a href="#"><h3>Home<h3></a></li>
+
   <li role="presentation"><a href="#"><h3>Profile<h3></a></li>
+
   <li role="presentation"><a href="#"><h3>Messages<h3></a></li>
+
                         </ul> -->
+
                         <ul class="nav nav-tabs nav-justified">
-                         <li><a data-toggle="tab"  href="#dropdownL" class="active" onclick="ga('send', 'event', 'Lecture Roster','click'); return allStudents();"><h4>Lecture Roster</h4></a></li>
-                                    <li><a data-toggle="tab"  href="#dropdown2" class="active" onclick="ga('send', 'event', 'Lab Roster','click'); return labRoster();"><h4>Lab Roster</h4></a></li>
-                                    <li><a data-toggle="tab"  href="#dropdown3" class="active" onclick="ga('send', 'event', 'Project Roster','click'); return projectRoster();"><h4>Project Roster</h4></a></li>
+
+                         <li><a data-toggle="tab" class = "active" href="#dropdownL"><h4>Lecture Roster</h4></a></li>
+
+                                    <li><a data-toggle="tab" href="#dropdown2" onclick="return labRoster();"><h4>Lab Roster</h4></a></li>
+
+                                    <li><a data-toggle="tab" href="#dropdown3" onclick="return projectRoster();"><h4>Project Roster</h4></a></li>
+
                         </ul> 
+
+
 
                         <div class="tab-content">
 
+
+
                             <div id="dropdownL" class="tab-pane active">
+
                                <!-- <h2><b>Lecture Roster</b></h2> -->
 
+
+
                                 
+
                                 <!-- <hr align="center" width="100%" size="5"><br> -->
+
                                
+
                                 <div class=""> 
+
                                     <table id="lecture" class="table table-bordered" >
+
                                         <thead>
-                                            
+
+                                            <tr>
+
+
+
+                                                <th>Matric Number </th>
+
+                                                <th>Name</th>
+
+                                                <th>Lab group</th>
+
+                                                <th>Email</th>
+
+                                            </tr>
+
                                         </thead>
+
                                         <tbody>
+
                                             
+
                                                 
+
                                             
+
                                         </tbody>
+
                                     </table>
+
                                 </div>
+
                             </div>
-                            <div id="dropdown3" class="tab-pane active">
+
+                            <div id="dropdown3" class="tab-pane fade">
+
                                 <!-- <h2><b>Project roster</b></h2><hr align="center" width="100%" size="5"><br> -->
+
                             <div class="">
+
                                 <table id="project1" class="table table-bordered" border="1" style="width: 300px; border-collapse: collapse; float: left; margin-right: 10px; margin-bottom: 10px">
+
 									  <thead>
+
 									  </thead>
+
                                       <tbody>
+
 									  </tbody>
+
                                     </table>
+
+
 
                                     <table id="project2" class="table table-bordered" border="1" style="width: 300px; border-collapse: collapse; float: left; margin-right: 10px; margin-bottom: 10px">
+
                                       <thead>
+
 									  </thead>
+
                                       <tbody>
+
 									  </tbody>
+
                                     </table>
+
+
 
                                     <table id="project3" class="table table-bordered" border="1" style="width: 300px; border-collapse: collapse; float: left; margin-right: 10px; margin-bottom: 10px">
+
                                       <thead>
+
 									  </thead>
+
                                       <tbody>
+
 									  </tbody>
+
                                     </table>
 
+
+
                             </div>
+
                             </div>
-                            <div id="dropdown2" class="tab-pane active">
+
+                            <div id="dropdown2" class="tab-pane fade">
+
                                 <!-- <h2><b>Lab Roster</b></h2><hr align="center" width="100%" size="5"><br> -->
+
                             <div class="">
+
                                 <table id="lab1" class="table table-bordered" border="1" style="width: 300px; border-collapse: collapse; float: left; margin-right: 10px; margin-bottom: 10px">
+
                                       <thead></thead>
+
                                       <tbody>
+
 									  </tbody>
+
                                 </table>
 
+
+
                                     <table id="lab2" class="table table-bordered" border="1" style="width: 300px; border-collapse: collapse; float: left; margin-right: 10px; margin-bottom: 10px">
+
                                       <thead></thead>
+
                                       <tbody>
+
 									  </tbody>
+
                                     </table>
+
+
 
                                     <table id="lab3" class="table table-bordered" border="1" style="width: 300px; border-collapse: collapse; float: left; margin-right: 10px; margin-bottom: 10px">
+
                                       <thead></thead>
+
                                       <tbody>
+
 									  </tbody>
+
                                     </table>
 
+
+
                             </div>
+
                         </div>
+
+<div id="dropdown4" class="tab-pane fade">
+
+                        <div class=""> 
+
+                                    <table class="table table-bordered">
+
+                                        <thead>
+
+                                            <tr>
+
+
+
+                                                <th>Week </th>
+
+                                                <th>Lab Details</th>
+
+                                                <th>Lecture Details</th>
+
+                                                
+
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody>
+
+                                           <tr deadline="1421121599"> <!--13 Jan 15, 11.59am-->
+
+  <td>01, 13 Jan</td>
+
+  <td>N/A yet</td>
+
+  <td><a href="cp3101b/introduction.html">Lecture1 - Introduction</a> and do <a href="http://cp3101b.comp.nus.edu.sg/~stevenha/profile.html" target="_blank">Profiling</a> (official students only)</td>
+
+</tr>
+
+<tr deadline="1421121599"> <!--13 Jan 15, 11.59am-->
+
+  <td></td>
+
+  <td>N/A yet</td>
+
+  <td><a href="cp3101b/http.html">Lecture2 - HTTP</a> </td>
+
+</tr>
+
+
+
+<tr deadline="1421726399"> <!--20 Jan 15, 11.59am-->
+
+  <td>02, 20 Jan</td>
+
+  <td><a href="cp3101b/lab0.html"><span title="Compulsory-but-not-graded">Lab0: Ensuring Web Presence*</span></a></td>
+
+  <td><a href="cp3101b/html5.html">Lecture3 - HTML5</a> followed with <a href="cp3101b/css3.html">Lecture4 - CSS3</a> (short, not Steven's strength yet)
+
+  </td>
+
+</tr>
+
+
+
+<tr deadline="1422331199"> <!--27 Jan 15, 11.59am-->
+
+  <td>03, 26+27 Jan</td>
+
+  <td><a href="cp3101b/lab1.html">Lab1: Not Just Mockup</a></td>
+
+  <td><a href="cp3101b/css3.html#css-box-model">Lecture4 - CSS3</a> (continued), then <a href="cp3101b/js.html">Lecture5 - JS</a> 
+
+</tr>
+
+
+
+<tr deadline="1422935999"> <!--03 Feb 15, 11.59am-->
+
+  <td>04, 02+03 Feb</td>
+
+  <td><a href="cp3101b/lab2.html">Lab2: First Version</a></td>
+
+  <td><a href="cp3101b/js.html#Recap">Lecture5 - JS</a> (jQuery, HTML5 canvas, and beyond)</a> 
+
+</tr>
+
+
+
+<tr deadline="1423540799"> <!--10 Feb 15, 11.59am-->
+
+  <td>05, 09+10 Feb</td>
+
+  <td><a href="cp3101b/lab3.html">Lab3: Requirement Change</a></td>
+
+  <td><a href="cp3101b/php.html">Lecture6 - PHP</a></td>
+
+</tr>
+
+
+
+<tr deadline="1424145599"> <!--17 Feb 15, 11.59am-->
+
+  <td>06, 16+17 Feb</td>
+
+  <td><a href="cp3101b/lab4.html">Lab4: Game Server</a></td>
+
+  <td><a href="cp3101b/sql.html">Lecture7 - SQL</a> (which ends with PHP integration) 
+
+  </td>
+
+</tr>
+
+                                            
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                              </div>
+
+
 
 
 
                               
 
+
+
                     </div>
+
                         
 
-                            
+
+
                             
 
+                            
+
+
+
                         </div>
+
                     </div>
+
        <!--             
+
 			<div class="mt"></div>
+
 			<div class="col-lg-4">
+
 				<a href="#"><img src="assets/img/01.jpg" alt=""></a>
+
 			</div>
+
 			<div class="col-lg-4">
+
 				<a href="#"><img src="assets/img/02.jpg" alt=""></a>
+
 			</div>
+
 			<div class="col-lg-4">
+
 				<a href="#"><img src="assets/img/03.jpg" alt=""></a>
+
 			</div>
+
 		</div>
+
 		
+
 		<div class="row centered mt grid">
+
 			<div class="mt"></div>		
+
 			<div class="col-lg-4">
+
 				<a href="#"><img src="assets/img/04.jpg" alt=""></a>
+
 			</div>
+
 			<div class="col-lg-4">
+
 				<a href="#"><img src="assets/img/05.jpg" alt=""></a>
+
 			</div>
+
 			<div class="col-lg-4">
+
 				<a href="#"><img src="assets/img/06.jpg" alt=""></a>
+
 			</div>
+
 		</div>
+
 		
+
 		<div class="row mt centered">
+
 			<div class="col-lg-7 col-lg-offset-1 mt">
+
 					<p class="lead">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.</p>
+
 			</div>
+
 			
+
 			<div class="col-lg-3 mt">
+
 				<p><button type="button" class="btn btn-theme btn-lg">Email Me!</button></p>
+
 			</div>
+
 		</div>
+
 	</div>
+
+
+
 
 
 	<div id="skills">
+
 		<div class="container">
+
 			<div class="row centered">
+
 				<h3>OUR SKILLS</h3>
+
 				<div class="col-lg-3 mt">
+
 					<canvas id="javascript" height="130" width="130"></canvas>
+
 					<p>Javascript</p>
+
 					<br>
+
 					<script>
+
 						var doughnutData = [
+
 								{
+
 									value: 70,
+
 									color:"#74cfae"
+
 								},
+
 								{
+
 									value : 30,
+
 									color : "#3c3c3c"
+
 								}
+
 							];
+
 							var myDoughnut = new Chart(document.getElementById("javascript").getContext("2d")).Doughnut(doughnutData);
+
 					</script>
+
 				</div>
+
 				<div class="col-lg-3 mt">
+
 					<canvas id="bootstrap" height="130" width="130"></canvas>
+
 					<p>Bootstrap</p>
+
 					<br>
+
 					<script>
+
 						var doughnutData = [
+
 								{
+
 									value: 90,
+
 									color:"#74cfae"
+
 								},
+
 								{
+
 									value : 10,
+
 									color : "#3c3c3c"
+
 								}
+
 							];
+
 							var myDoughnut = new Chart(document.getElementById("bootstrap").getContext("2d")).Doughnut(doughnutData);
+
 					</script>
+
 				</div>
+
 				<div class="col-lg-3 mt">
+
 					<canvas id="wordpress" height="130" width="130"></canvas>
+
 					<p>Wordpress</p>
+
 					<br>
+
 					<script>
+
 						var doughnutData = [
+
 								{
+
 									value: 65,
+
 									color:"#74cfae"
+
 								},
+
 								{
+
 									value : 35,
+
 									color : "#3c3c3c"
+
 								}
+
 							];
+
 							var myDoughnut = new Chart(document.getElementById("wordpress").getContext("2d")).Doughnut(doughnutData);
+
 					</script>
+
 				</div>
+
 				<div class="col-lg-3 mt">
+
 					<canvas id="photoshop" height="130" width="130"></canvas>
+
 					<p>Photoshop</p>
+
 					<br>
+
 					<script>
+
 						var doughnutData = [
+
 								{
+
 									value: 50,
+
 									color:"#74cfae"
+
 								},
+
 								{
+
 									value : 50,
+
 									color : "#3c3c3c"
+
 								}
+
 							];
+
 							var myDoughnut = new Chart(document.getElementById("photoshop").getContext("2d")).Doughnut(doughnutData);
+
 					</script>
+
 				</div>
+
 			</div><!-- /row -->
+
 		<!-- /skills -->
+
 	
+
 	
+
+
 
 	<div id="f">
+
 		<div class="container">
+
 			<div class="row">
+
 				<br><br>
+
 			</div>
+
 		</div>
+
 	</div>
 
+
+
     <!-- Bootstrap core JavaScript
+
     ================================================== -->
+
     <!-- Placed at the end of the document so the pages load faster -->
+
     <script src="assets/js/bootstrap.js"></script>
-	
-	<script>
-	if (localStorage.visitcount) // better than HTTP cookies
-			localStorage.visitcount = parseInt(localStorage.visitcount)+1;
-	else
-			localStorage.visitcount = 1;
-				
-	if(localStorage.visitcount > 3)
-		document.getElementById("green").style.display = "none";
-		document.getElementById("hello").style.display = "none";
-			
-	</script>
-	
+
   </body>
+
 </html>
+
